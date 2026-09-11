@@ -6,8 +6,14 @@ import '../../domain/entities/place_search_mode.dart';
 abstract final class AppConfig {
   static PlaceSearchMode get defaultPlaceSearchMode {
     final raw = _read('PLACE_PROVIDER', fromEnvironment: 'PLACE_PROVIDER');
-    if (raw.isEmpty) return PlaceSearchMode.mock;
-    return PlaceSearchModeX.parse(raw, fallback: PlaceSearchMode.mock);
+    if (raw.isNotEmpty) {
+      return PlaceSearchModeX.parse(raw, fallback: PlaceSearchMode.mock);
+    }
+    // No PLACE_PROVIDER set — pick from available keys.
+    if (hasPlacesKey && hasGeoapifyKey) return PlaceSearchMode.automatic;
+    if (hasGeoapifyKey) return PlaceSearchMode.geoapify;
+    if (hasPlacesKey) return PlaceSearchMode.google;
+    return PlaceSearchMode.mock;
   }
 
   static String get googlePlacesApiKey =>
@@ -43,15 +49,17 @@ abstract final class AppConfig {
     return '';
   }
 
+  /// Loads `.env` (overrides) on top of `.env.example` (defaults).
+  /// Both must be listed under `flutter/assets` in pubspec.yaml.
   static Future<void> loadEnv() async {
     try {
-      await dotenv.load(fileName: '.env');
+      await dotenv.load(
+        fileName: '.env.example',
+        overrideWithFiles: const ['.env'],
+        isOptional: true,
+      );
     } catch (_) {
-      try {
-        await dotenv.load(fileName: '.env.example');
-      } catch (_) {
-        // ponytail: first-run and CI have no env file; mock provider is the default
-      }
+      // ponytail: first-run and CI may have no env assets; mock is the fallback
     }
   }
 }

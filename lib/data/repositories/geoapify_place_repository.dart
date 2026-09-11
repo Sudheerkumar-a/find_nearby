@@ -23,24 +23,24 @@ final class GeoapifyPlaceRepository implements PlaceRepository {
 
   final _memory = <String, (DateTime, PlacePage)>{};
 
+  /// Broad POI set for home "nearby" when no category chip is selected.
+  static const _defaultNearbyCategories =
+      'catering,commercial,healthcare,service,accommodation,entertainment,education,tourism,leisure';
+
   @override
   Future<PlacePage> searchNearby(NearbyQuery query) async {
-    final category = query.placeCategory != null
+    final mapped = query.placeCategory != null
         ? GeoapifyCategoryMapper.categoryOf(query.placeCategory!)
         : query.categoryGroup != null
         ? GeoapifyCategoryMapper.categoryForGroup(query.categoryGroup!)
         : null;
     assert(
-      category == null ||
-          GeoapifyCategoryMapper.isValidGeoapifyCategory(category),
-      'Invalid Geoapify category: $category',
+      mapped == null || GeoapifyCategoryMapper.isValidGeoapifyCategory(mapped),
+      'Invalid Geoapify category: $mapped',
     );
     final nameFilter = (query.textQuery ?? '').trim();
-
-    // Nearby without a resolvable category and without a name is not useful.
-    if (category == null && nameFilter.isEmpty) {
-      return const PlacePage(places: []);
-    }
+    final category =
+        mapped ?? (nameFilter.isEmpty ? _defaultNearbyCategories : null);
 
     final key =
         'g-n:${query.origin.latitude.toStringAsFixed(3)},${query.origin.longitude.toStringAsFixed(3)}:'
