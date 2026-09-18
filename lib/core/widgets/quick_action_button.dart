@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../../domain/entities/app_category.dart';
+import '../theme/app_colors.dart';
 import '../utils/icon_map.dart';
 
 class QuickActionButton extends StatelessWidget {
@@ -15,7 +16,6 @@ class QuickActionButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final colors = Theme.of(context).colorScheme;
     return SizedBox(
       width: 76,
       child: InkWell(
@@ -26,15 +26,18 @@ class QuickActionButton extends StatelessWidget {
           child: Column(
             children: [
               Container(
-                width: 52,
-                height: 52,
+                width: 54,
+                height: 54,
                 decoration: BoxDecoration(
-                  color: colors.secondaryContainer,
-                  borderRadius: BorderRadius.circular(16),
+                  color: AppColors.tintMint,
+                  borderRadius: BorderRadius.circular(18),
+                  border: Border.all(
+                    color: AppColors.teal.withValues(alpha: 0.25),
+                  ),
                 ),
                 child: Icon(
                   iconFromName(action.icon),
-                  color: colors.onSecondaryContainer,
+                  color: AppColors.tealDark,
                 ),
               ),
               const SizedBox(height: 8),
@@ -43,7 +46,10 @@ class QuickActionButton extends StatelessWidget {
                 maxLines: 1,
                 overflow: TextOverflow.ellipsis,
                 textAlign: TextAlign.center,
-                style: Theme.of(context).textTheme.labelMedium,
+                style: Theme.of(context).textTheme.labelMedium?.copyWith(
+                  fontWeight: FontWeight.w600,
+                  color: AppColors.ink,
+                ),
               ),
             ],
           ),

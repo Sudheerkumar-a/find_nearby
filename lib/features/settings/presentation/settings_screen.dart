@@ -168,16 +168,19 @@ class SettingsScreen extends ConsumerWidget {
                     style: Theme.of(context).textTheme.titleLarge,
                   ),
                   Slider(
-                    min: 1,
-                    max: 25,
-                    divisions: 24,
+                    min: AppConstants.minRadiusMeters / 1000,
+                    max: AppConstants.maxRadiusMeters / 1000,
+                    divisions: 45,
                     label: '${km.toStringAsFixed(0)} km',
-                    value: km,
+                    value: km.clamp(
+                      AppConstants.minRadiusMeters / 1000,
+                      AppConstants.maxRadiusMeters / 1000,
+                    ),
                     onChanged: (value) => setState(() => km = value),
                   ),
                   FilledButton(
                     onPressed: () async {
-                      final meters = km * 1000;
+                      final meters = AppConstants.clampRadiusMeters(km * 1000);
                       ref
                           .read(filtersProvider.notifier)
                           .apply(

@@ -40,7 +40,10 @@ class _FilterBottomSheetState extends ConsumerState<FilterBottomSheet> {
   void initState() {
     super.initState();
     _draft = ref.read(filtersProvider);
-    _customKm = (_draft.radiusMeters / 1000).clamp(0.5, 50);
+    _customKm = (_draft.radiusMeters / 1000).clamp(
+      AppConstants.minRadiusMeters / 1000,
+      AppConstants.maxRadiusMeters / 1000,
+    );
   }
 
   @override
@@ -71,7 +74,7 @@ class _FilterBottomSheetState extends ConsumerState<FilterBottomSheet> {
                   TextButton(
                     onPressed: () => setState(() {
                       _draft = const SearchFilters();
-                      _customKm = 2;
+                      _customKm = AppConstants.defaultRadiusMeters / 1000;
                     }),
                     child: const Text('Reset'),
                   ),
@@ -114,14 +117,18 @@ class _FilterBottomSheetState extends ConsumerState<FilterBottomSheet> {
                     ),
                     if (_draft.customRadius) ...[
                       Slider(
-                        min: 0.5,
-                        max: 50,
-                        divisions: 99,
-                        label: '${_customKm.toStringAsFixed(1)} km',
+                        min: AppConstants.minRadiusMeters / 1000,
+                        max: AppConstants.maxRadiusMeters / 1000,
+                        divisions: 45,
+                        label: '${_customKm.toStringAsFixed(0)} km',
                         value: _customKm,
                         onChanged: (value) => setState(() {
                           _customKm = value;
-                          _draft = _draft.copyWith(radiusMeters: value * 1000);
+                          _draft = _draft.copyWith(
+                            radiusMeters: AppConstants.clampRadiusMeters(
+                              value * 1000,
+                            ),
+                          );
                         }),
                       ),
                     ],

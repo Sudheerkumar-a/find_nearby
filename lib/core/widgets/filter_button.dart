@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import '../theme/app_colors.dart';
+
 class FilterButton extends StatelessWidget {
   const FilterButton({
     super.key,
@@ -15,14 +17,21 @@ class FilterButton extends StatelessWidget {
     final label = activeCount > 0 ? 'Filters ($activeCount)' : 'Filters';
     return Badge(
       isLabelVisible: activeCount > 0,
+      backgroundColor: AppColors.coral,
       label: Text('$activeCount'),
       child: Semantics(
         button: true,
         label: label,
-        child: IconButton.filledTonal(
-          tooltip: label,
-          onPressed: onPressed,
-          icon: const Icon(Icons.tune_rounded),
+        child: Material(
+          color: Colors.white,
+          elevation: 2,
+          shadowColor: Colors.black26,
+          borderRadius: BorderRadius.circular(16),
+          child: IconButton(
+            tooltip: label,
+            onPressed: onPressed,
+            icon: const Icon(Icons.tune_rounded, color: AppColors.tealDark),
+          ),
         ),
       ),
     );

@@ -29,12 +29,17 @@ final class DriftSettingsRepository implements SettingsRepository {
   @override
   Future<double> getSearchRadiusMeters() async {
     final raw = await _read(SettingKeys.searchRadiusMeters);
-    return double.tryParse(raw ?? '') ?? AppConstants.defaultRadiusMeters;
+    final parsed =
+        double.tryParse(raw ?? '') ?? AppConstants.defaultRadiusMeters;
+    return AppConstants.clampRadiusMeters(parsed);
   }
 
   @override
   Future<void> setSearchRadiusMeters(double meters) {
-    return _write(SettingKeys.searchRadiusMeters, meters.toString());
+    return _write(
+      SettingKeys.searchRadiusMeters,
+      AppConstants.clampRadiusMeters(meters).toString(),
+    );
   }
 
   @override

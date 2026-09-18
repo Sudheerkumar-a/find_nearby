@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../../domain/entities/app_category.dart';
+import '../theme/app_colors.dart';
 import '../utils/icon_map.dart';
 
 class CategoryChip extends StatelessWidget {
@@ -17,12 +18,11 @@ class CategoryChip extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return FilterChip(
+    return _GxPill(
       selected: selected,
-      onSelected: (_) => onTap(),
-      avatar: Icon(iconFromName(category.icon), size: 18),
-      label: Text(category.name),
-      showCheckmark: false,
+      onTap: onTap,
+      icon: iconFromName(category.icon),
+      label: category.name,
     );
   }
 }
@@ -41,10 +41,57 @@ class SubcategoryChip extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ChoiceChip(
-      selected: selected,
-      onSelected: (_) => onTap(),
-      label: Text(subcategory.name),
+    return _GxPill(selected: selected, onTap: onTap, label: subcategory.name);
+  }
+}
+
+class _GxPill extends StatelessWidget {
+  const _GxPill({
+    required this.selected,
+    required this.onTap,
+    required this.label,
+    this.icon,
+  });
+
+  final bool selected;
+  final VoidCallback onTap;
+  final String label;
+  final IconData? icon;
+
+  @override
+  Widget build(BuildContext context) {
+    return Material(
+      color: selected ? AppColors.coral : Colors.white,
+      elevation: selected ? 0 : 1,
+      shadowColor: Colors.black26,
+      borderRadius: BorderRadius.circular(24),
+      child: InkWell(
+        onTap: onTap,
+        borderRadius: BorderRadius.circular(24),
+        child: Padding(
+          padding: EdgeInsets.fromLTRB(icon == null ? 14 : 10, 10, 14, 10),
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              if (icon != null) ...[
+                Icon(
+                  icon,
+                  size: 18,
+                  color: selected ? AppColors.onCoral : AppColors.teal,
+                ),
+                const SizedBox(width: 6),
+              ],
+              Text(
+                label,
+                style: Theme.of(context).textTheme.labelLarge?.copyWith(
+                  fontWeight: FontWeight.w700,
+                  color: selected ? AppColors.onCoral : AppColors.ink,
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
     );
   }
 }

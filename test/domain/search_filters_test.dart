@@ -8,7 +8,7 @@ void main() {
 
   test('counts each non-default filter', () {
     const filters = SearchFilters(
-      radiusMeters: 5000,
+      radiusMeters: 10000,
       minRating: 4,
       openNow: true,
       categoryId: 'food',

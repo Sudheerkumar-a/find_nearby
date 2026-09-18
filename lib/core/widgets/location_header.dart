@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../../domain/entities/user_location.dart';
+import '../theme/app_colors.dart';
 
 class LocationHeader extends StatelessWidget {
   const LocationHeader({
@@ -8,11 +9,13 @@ class LocationHeader extends StatelessWidget {
     required this.location,
     required this.onRefresh,
     this.onOpenSettings,
+    this.onTeal = false,
   });
 
   final UserLocation location;
   final VoidCallback onRefresh;
   final VoidCallback? onOpenSettings;
+  final bool onTeal;
 
   @override
   Widget build(BuildContext context) {
@@ -49,27 +52,43 @@ class LocationHeader extends StatelessWidget {
       ),
     };
 
+    final titleColor = onTeal ? AppColors.onTeal.withValues(alpha: 0.85) : null;
+    final subtitleColor = onTeal ? AppColors.onTeal : null;
+    final iconColor = onTeal ? AppColors.onTeal : AppColors.teal;
+
     return Row(
       children: [
-        Icon(Icons.place_rounded, color: Theme.of(context).colorScheme.primary),
+        Icon(Icons.place_rounded, color: iconColor),
         const SizedBox(width: 8),
         Expanded(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(title, style: Theme.of(context).textTheme.labelMedium),
+              Text(
+                title,
+                style: Theme.of(
+                  context,
+                ).textTheme.labelMedium?.copyWith(color: titleColor),
+              ),
               Text(
                 subtitle,
                 maxLines: 1,
                 overflow: TextOverflow.ellipsis,
-                style: Theme.of(
-                  context,
-                ).textTheme.titleSmall?.copyWith(fontWeight: FontWeight.w700),
+                style: Theme.of(context).textTheme.titleSmall?.copyWith(
+                  fontWeight: FontWeight.w700,
+                  color: subtitleColor,
+                ),
               ),
             ],
           ),
         ),
-        TextButton(onPressed: action.$2, child: Text(action.$1)),
+        TextButton(
+          onPressed: action.$2,
+          style: TextButton.styleFrom(
+            foregroundColor: onTeal ? AppColors.onTeal : AppColors.tealDark,
+          ),
+          child: Text(action.$1),
+        ),
       ],
     );
   }

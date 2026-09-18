@@ -11,7 +11,7 @@ import 'package:flutter/material.dart';
 final class FakeSettingsRepository implements SettingsRepository {
   FakeSettingsRepository({
     this.themeMode = ThemeMode.system,
-    this.radiusMeters = 2000,
+    this.radiusMeters = 5000,
     this.placeSearchMode = PlaceSearchMode.mock,
   });
 

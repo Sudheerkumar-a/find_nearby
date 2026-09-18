@@ -1,5 +1,6 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../../core/constants/app_constants.dart';
 import '../../../core/di/providers.dart';
 import '../../../domain/entities/search_filters.dart';
 
@@ -14,10 +15,14 @@ class FiltersController extends Notifier<SearchFilters> {
     final meters = await ref
         .read(settingsRepositoryProvider)
         .getSearchRadiusMeters();
-    state = state.copyWith(radiusMeters: meters);
+    state = state.copyWith(
+      radiusMeters: AppConstants.clampRadiusMeters(meters),
+    );
   }
 
-  void apply(SearchFilters filters) => state = filters;
+  void apply(SearchFilters filters) => state = filters.copyWith(
+    radiusMeters: AppConstants.clampRadiusMeters(filters.radiusMeters),
+  );
 
   void setCategory({String? categoryId, String? subcategoryId}) {
     state = state.copyWith(

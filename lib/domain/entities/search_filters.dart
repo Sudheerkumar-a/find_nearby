@@ -1,8 +1,10 @@
+import '../../core/constants/app_constants.dart';
+
 enum SortOption { nearest, highestRated, mostPopular }
 
 final class SearchFilters {
   const SearchFilters({
-    this.radiusMeters = 2000,
+    this.radiusMeters = AppConstants.defaultRadiusMeters,
     this.minRating,
     this.openNow = false,
     this.categoryId,
@@ -21,7 +23,9 @@ final class SearchFilters {
 
   int get activeCount {
     var count = 0;
-    if (radiusMeters != 2000 || customRadius) count++;
+    if (radiusMeters != AppConstants.defaultRadiusMeters || customRadius) {
+      count++;
+    }
     if (minRating != null) count++;
     if (openNow) count++;
     if (categoryId != null) count++;

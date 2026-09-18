@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../../domain/entities/place.dart';
+import '../theme/app_colors.dart';
 import 'distance_widget.dart';
 import 'favorite_button.dart';
 import 'opening_status.dart';
@@ -28,7 +29,11 @@ class PlaceCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Card(
+    return Material(
+      color: AppColors.card,
+      elevation: 2,
+      shadowColor: Colors.black.withValues(alpha: 0.08),
+      borderRadius: BorderRadius.circular(20),
       clipBehavior: Clip.antiAlias,
       child: InkWell(
         onTap: onOpen,
@@ -46,6 +51,30 @@ class PlaceCard extends StatelessWidget {
                     onPressed: onFavorite,
                   ),
                 ),
+                if (place.isOpen != null)
+                  Positioned(
+                    top: 10,
+                    left: 10,
+                    child: Container(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 10,
+                        vertical: 4,
+                      ),
+                      decoration: BoxDecoration(
+                        color: place.isOpen!
+                            ? AppColors.success
+                            : AppColors.coral,
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                      child: Text(
+                        place.isOpen! ? 'Open' : 'Closed',
+                        style: Theme.of(context).textTheme.labelSmall?.copyWith(
+                          color: Colors.white,
+                          fontWeight: FontWeight.w700,
+                        ),
+                      ),
+                    ),
+                  ),
               ],
             ),
             Padding(
@@ -58,7 +87,8 @@ class PlaceCard extends StatelessWidget {
                     maxLines: 2,
                     overflow: TextOverflow.ellipsis,
                     style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                      fontWeight: FontWeight.w700,
+                      fontWeight: FontWeight.w800,
+                      color: AppColors.tealDark,
                     ),
                   ),
                   if (place.categoryLabel.isNotEmpty) ...[
@@ -66,7 +96,7 @@ class PlaceCard extends StatelessWidget {
                     Text(
                       place.categoryLabel,
                       style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                        color: Theme.of(context).colorScheme.onSurfaceVariant,
+                        color: AppColors.inkMuted,
                       ),
                     ),
                   ],

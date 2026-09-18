@@ -6,13 +6,14 @@ abstract final class AppConstants {
   static const Duration nearbyCacheTtl = Duration(minutes: 2);
   static const Duration locationTimeout = Duration(seconds: 12);
 
-  static const double defaultRadiusMeters = 2000;
+  static const double minRadiusMeters = 5000;
+  static const double maxRadiusMeters = 50000;
+  static const double defaultRadiusMeters = minRadiusMeters;
   static const List<double> radiusPresetsMeters = [
-    1000,
-    2000,
     5000,
     10000,
     25000,
+    50000,
   ];
 
   static const int searchHistoryLimit = 12;
@@ -21,6 +22,9 @@ abstract final class AppConstants {
   static const String privacyPolicyUrl =
       'https://example.com/findnearby/privacy';
   static const String termsUrl = 'https://example.com/findnearby/terms';
+
+  static double clampRadiusMeters(double meters) =>
+      meters.clamp(minRadiusMeters, maxRadiusMeters).toDouble();
 }
 
 abstract final class SettingKeys {
