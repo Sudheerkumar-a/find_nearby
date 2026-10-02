@@ -50,19 +50,60 @@ class AppSettings extends Table {
   Set<Column<Object>> get primaryKey => {key};
 }
 
+/// Google place cache keyed by [googlePlaceId] (provider place id).
+class CachedPlaces extends Table {
+  TextColumn get googlePlaceId => text()();
+  TextColumn get provider => text()();
+  TextColumn get name => text()();
+  RealColumn get latitude => real()();
+  RealColumn get longitude => real()();
+  TextColumn get address => text().nullable()();
+  TextColumn get phoneNumber => text().nullable()();
+  TextColumn get website => text().nullable()();
+  RealColumn get rating => real().nullable()();
+  IntColumn get reviewCount => integer().nullable()();
+  BoolColumn get isOpen => boolean().nullable()();
+  TextColumn get category => text().nullable()();
+  TextColumn get subcategory => text().nullable()();
+  TextColumn get openingHours => text().nullable()();
+  TextColumn get photos => text().nullable()();
+  TextColumn get description => text().nullable()();
+  DateTimeColumn get lastUpdated => dateTime()();
+  DateTimeColumn get detailsUpdated => dateTime().nullable()();
+  DateTimeColumn get ratingUpdated => dateTime().nullable()();
+  DateTimeColumn get openingStatusUpdated => dateTime().nullable()();
+
+  @override
+  Set<Column<Object>> get primaryKey => {googlePlaceId};
+}
+
 @DriftDatabase(
   tables: [
     FavoritePlaces,
     SearchHistoryEntries,
     CategoryPreferences,
     AppSettings,
+    CachedPlaces,
   ],
 )
 class AppDatabase extends _$AppDatabase {
   AppDatabase([QueryExecutor? executor]) : super(executor ?? _openConnection());
 
   @override
-  int get schemaVersion => 1;
+  int get schemaVersion => 3;
+
+  @override
+  MigrationStrategy get migration => MigrationStrategy(
+    onUpgrade: (m, from, to) async {
+      if (from < 2) {
+        await m.createTable(cachedPlaces);
+      }
+      if (from < 3) {
+        await m.addColumn(cachedPlaces, cachedPlaces.ratingUpdated);
+        await m.addColumn(cachedPlaces, cachedPlaces.openingStatusUpdated);
+      }
+    },
+  );
 
   static QueryExecutor _openConnection() {
     return driftDatabase(name: 'find_nearby');

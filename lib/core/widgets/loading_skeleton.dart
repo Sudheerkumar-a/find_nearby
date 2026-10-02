@@ -61,25 +61,126 @@ class PlaceCardSkeleton extends StatelessWidget {
   Widget build(BuildContext context) {
     return const Card(
       clipBehavior: Clip.antiAlias,
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          LoadingSkeleton(height: 140, radius: 0),
-          Padding(
-            padding: EdgeInsets.all(16),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                LoadingSkeleton(width: 220, height: 18),
+      child: Padding(
+        padding: EdgeInsets.all(12),
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            LoadingSkeleton(width: 72, height: 72, radius: 12),
+            SizedBox(width: 12),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  LoadingSkeleton(width: 180, height: 16),
+                  SizedBox(height: 8),
+                  LoadingSkeleton(width: 120, height: 12),
+                  SizedBox(height: 8),
+                  LoadingSkeleton(width: 200, height: 12),
+                ],
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class PlaceDetailsSkeleton extends StatelessWidget {
+  const PlaceDetailsSkeleton({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: CustomScrollView(
+        slivers: [
+          SliverAppBar(
+            pinned: true,
+            expandedHeight: 260,
+            leading: const BackButton(),
+            actions: const [
+              Padding(
+                padding: EdgeInsets.only(right: 8),
+                child: LoadingSkeleton(width: 40, height: 40, radius: 20),
+              ),
+              Padding(
+                padding: EdgeInsets.only(right: 8),
+                child: LoadingSkeleton(width: 40, height: 40, radius: 20),
+              ),
+            ],
+            flexibleSpace: const FlexibleSpaceBar(
+              background: LoadingSkeleton(height: 300, radius: 0),
+            ),
+          ),
+          SliverPadding(
+            padding: const EdgeInsets.fromLTRB(20, 20, 20, 32),
+            sliver: SliverList.list(
+              children: const [
+                LoadingSkeleton(width: 260, height: 28, radius: 8),
+                SizedBox(height: 8),
+                LoadingSkeleton(width: 120, height: 18, radius: 8),
+                SizedBox(height: 8),
+                LoadingSkeleton(width: 100, height: 16, radius: 8),
+                SizedBox(height: 16),
+                _InfoRowSkeleton(width: 280),
+                SizedBox(height: 8),
+                LoadingSkeleton(width: 90, height: 16, radius: 8),
+                SizedBox(height: 6),
+                LoadingSkeleton(width: 180, height: 14, radius: 8),
+                SizedBox(height: 16),
+                _InfoRowSkeleton(width: 160),
+                SizedBox(height: 8),
+                _InfoRowSkeleton(width: 220),
+                SizedBox(height: 20),
+                Row(
+                  children: [
+                    Expanded(
+                      child: LoadingSkeleton(height: 48, radius: 24),
+                    ),
+                    SizedBox(width: 12),
+                    Expanded(
+                      child: LoadingSkeleton(height: 48, radius: 24),
+                    ),
+                  ],
+                ),
                 SizedBox(height: 10),
-                LoadingSkeleton(width: 140, height: 14),
-                SizedBox(height: 10),
-                LoadingSkeleton(width: 180, height: 14),
+                LoadingSkeleton(height: 48, radius: 24),
+                SizedBox(height: 28),
+                LoadingSkeleton(width: 60, height: 20, radius: 8),
+                SizedBox(height: 8),
+                LoadingSkeleton(height: 14, radius: 8),
+                SizedBox(height: 6),
+                LoadingSkeleton(width: 300, height: 14, radius: 8),
+                SizedBox(height: 6),
+                LoadingSkeleton(width: 240, height: 14, radius: 8),
+                SizedBox(height: 28),
+                LoadingSkeleton(width: 40, height: 20, radius: 8),
+                SizedBox(height: 12),
+                LoadingSkeleton(height: 160, radius: 20),
               ],
             ),
           ),
         ],
       ),
+    );
+  }
+}
+
+class _InfoRowSkeleton extends StatelessWidget {
+  const _InfoRowSkeleton({required this.width});
+
+  final double width;
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        const LoadingSkeleton(width: 20, height: 20, radius: 6),
+        const SizedBox(width: 10),
+        LoadingSkeleton(width: width, height: 16, radius: 8),
+      ],
     );
   }
 }

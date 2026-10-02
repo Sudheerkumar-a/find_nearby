@@ -8,12 +8,14 @@ class LocationHeader extends StatelessWidget {
     super.key,
     required this.location,
     required this.onRefresh,
+    this.onChangeLocation,
     this.onOpenSettings,
     this.onTeal = false,
   });
 
   final UserLocation location;
   final VoidCallback onRefresh;
+  final VoidCallback? onChangeLocation;
   final VoidCallback? onOpenSettings;
   final bool onTeal;
 
@@ -46,9 +48,9 @@ class LocationHeader extends StatelessWidget {
         ('Try Again', onRefresh),
       ),
       LocationStatus.ready || LocationStatus.initial => (
-        'Current location',
+        location.isManual ? 'Custom location' : 'Current location',
         location.label,
-        ('Refresh', onRefresh),
+        (onChangeLocation == null ? 'Refresh' : 'Change', onChangeLocation ?? onRefresh),
       ),
     };
 
@@ -56,30 +58,42 @@ class LocationHeader extends StatelessWidget {
     final subtitleColor = onTeal ? AppColors.onTeal : null;
     final iconColor = onTeal ? AppColors.onTeal : AppColors.teal;
 
+    final canChange =
+        onChangeLocation != null &&
+        (location.status == LocationStatus.ready ||
+            location.status == LocationStatus.initial);
+
     return Row(
       children: [
         Icon(Icons.place_rounded, color: iconColor),
         const SizedBox(width: 8),
         Expanded(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                title,
-                style: Theme.of(
-                  context,
-                ).textTheme.labelMedium?.copyWith(color: titleColor),
+          child: InkWell(
+            onTap: canChange ? onChangeLocation : null,
+            borderRadius: BorderRadius.circular(8),
+            child: Padding(
+              padding: const EdgeInsets.symmetric(vertical: 2),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    title,
+                    style: Theme.of(
+                      context,
+                    ).textTheme.labelMedium?.copyWith(color: titleColor),
+                  ),
+                  Text(
+                    subtitle,
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    style: Theme.of(context).textTheme.titleSmall?.copyWith(
+                      fontWeight: FontWeight.w700,
+                      color: subtitleColor,
+                    ),
+                  ),
+                ],
               ),
-              Text(
-                subtitle,
-                maxLines: 1,
-                overflow: TextOverflow.ellipsis,
-                style: Theme.of(context).textTheme.titleSmall?.copyWith(
-                  fontWeight: FontWeight.w700,
-                  color: subtitleColor,
-                ),
-              ),
-            ],
+            ),
           ),
         ),
         TextButton(

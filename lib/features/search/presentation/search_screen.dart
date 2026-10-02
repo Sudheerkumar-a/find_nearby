@@ -8,6 +8,7 @@ import '../../../core/extensions/context_ext.dart';
 import '../../../core/router/app_router.dart';
 import '../../../core/utils/debounce.dart';
 import '../../../core/utils/device_actions.dart';
+import '../../../domain/entities/place.dart';
 import '../../../core/widgets/app_search_bar.dart';
 import '../../../core/widgets/empty_state.dart';
 import '../../../core/widgets/error_state.dart';
@@ -52,7 +53,7 @@ class _SearchScreenState extends ConsumerState<SearchScreen> {
       body: Column(
         children: [
           Padding(
-            padding: const EdgeInsets.fromLTRB(20, 0, 20, 12),
+            padding: const EdgeInsets.fromLTRB(20, 16, 20, 12),
             child: AppSearchBar(
               controller: _controller,
               autofocus: true,
@@ -74,7 +75,7 @@ class _SearchScreenState extends ConsumerState<SearchScreen> {
 
   Widget _body(
     String query,
-    AsyncValue<List<dynamic>> results,
+    AsyncValue<List<Place>> results,
     List<String> history,
     Set<String> favoriteIds,
   ) {

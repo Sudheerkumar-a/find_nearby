@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../entities/place_search_mode.dart';
+import '../entities/user_location.dart';
 
 abstract class SettingsRepository {
   Stream<ThemeMode> watchThemeMode();
@@ -22,4 +23,10 @@ abstract class SettingsRepository {
   Future<PlaceSearchMode> getPlaceSearchMode();
 
   Future<void> setPlaceSearchMode(PlaceSearchMode mode);
+
+  Future<UserLocation?> getManualLocation();
+
+  Future<void> setManualLocation(UserLocation location);
+
+  Future<void> clearManualLocation();
 }

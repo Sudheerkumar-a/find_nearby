@@ -51,6 +51,7 @@ final class GeolocatorLocationService implements LocationService {
         status: LocationStatus.ready,
         point: point,
         label: await _labelFor(point),
+        source: LocationSource.device,
       );
     } on TimeoutException {
       return const UserLocation(
@@ -64,6 +65,23 @@ final class GeolocatorLocationService implements LocationService {
             ? error.userMessage
             : "We couldn't find your location. Try again.",
       );
+    }
+  }
+
+  @override
+  Future<({GeoPoint point, String label})?> lookupAddress(String query) async {
+    final needle = query.trim();
+    if (needle.isEmpty) return null;
+
+    try {
+      final locations = await Geocoding().locationFromAddress(needle);
+      final match = locations.firstOrNull;
+      if (match == null) return null;
+
+      final point = GeoPoint(match.latitude, match.longitude);
+      return (point: point, label: needle);
+    } catch (_) {
+      return null;
     }
   }
 
@@ -103,6 +121,10 @@ final class FixedLocationService implements LocationService {
 
   @override
   Future<UserLocation> current() async => location;
+
+  @override
+  Future<({GeoPoint point, String label})?> lookupAddress(String query) async =>
+      null;
 
   @override
   Future<void> openAppSettings() async {}

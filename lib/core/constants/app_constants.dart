@@ -32,4 +32,7 @@ abstract final class SettingKeys {
   static const String searchRadiusMeters = 'search_radius_meters';
   static const String notificationsEnabled = 'notifications_enabled';
   static const String placeSearchMode = 'place_search_mode';
+  static const String manualLocationLat = 'manual_location_lat';
+  static const String manualLocationLng = 'manual_location_lng';
+  static const String manualLocationLabel = 'manual_location_label';
 }

@@ -1773,6 +1773,1173 @@ class AppSettingsCompanion extends UpdateCompanion<AppSetting> {
   }
 }
 
+class $CachedPlacesTable extends CachedPlaces
+    with TableInfo<$CachedPlacesTable, CachedPlace> {
+  @override
+  final GeneratedDatabase attachedDatabase;
+  final String? _alias;
+  $CachedPlacesTable(this.attachedDatabase, [this._alias]);
+  static const VerificationMeta _googlePlaceIdMeta = const VerificationMeta(
+    'googlePlaceId',
+  );
+  @override
+  late final GeneratedColumn<String> googlePlaceId = GeneratedColumn<String>(
+    'google_place_id',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _providerMeta = const VerificationMeta(
+    'provider',
+  );
+  @override
+  late final GeneratedColumn<String> provider = GeneratedColumn<String>(
+    'provider',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _nameMeta = const VerificationMeta('name');
+  @override
+  late final GeneratedColumn<String> name = GeneratedColumn<String>(
+    'name',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _latitudeMeta = const VerificationMeta(
+    'latitude',
+  );
+  @override
+  late final GeneratedColumn<double> latitude = GeneratedColumn<double>(
+    'latitude',
+    aliasedName,
+    false,
+    type: DriftSqlType.double,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _longitudeMeta = const VerificationMeta(
+    'longitude',
+  );
+  @override
+  late final GeneratedColumn<double> longitude = GeneratedColumn<double>(
+    'longitude',
+    aliasedName,
+    false,
+    type: DriftSqlType.double,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _addressMeta = const VerificationMeta(
+    'address',
+  );
+  @override
+  late final GeneratedColumn<String> address = GeneratedColumn<String>(
+    'address',
+    aliasedName,
+    true,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+  );
+  static const VerificationMeta _phoneNumberMeta = const VerificationMeta(
+    'phoneNumber',
+  );
+  @override
+  late final GeneratedColumn<String> phoneNumber = GeneratedColumn<String>(
+    'phone_number',
+    aliasedName,
+    true,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+  );
+  static const VerificationMeta _websiteMeta = const VerificationMeta(
+    'website',
+  );
+  @override
+  late final GeneratedColumn<String> website = GeneratedColumn<String>(
+    'website',
+    aliasedName,
+    true,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+  );
+  static const VerificationMeta _ratingMeta = const VerificationMeta('rating');
+  @override
+  late final GeneratedColumn<double> rating = GeneratedColumn<double>(
+    'rating',
+    aliasedName,
+    true,
+    type: DriftSqlType.double,
+    requiredDuringInsert: false,
+  );
+  static const VerificationMeta _reviewCountMeta = const VerificationMeta(
+    'reviewCount',
+  );
+  @override
+  late final GeneratedColumn<int> reviewCount = GeneratedColumn<int>(
+    'review_count',
+    aliasedName,
+    true,
+    type: DriftSqlType.int,
+    requiredDuringInsert: false,
+  );
+  static const VerificationMeta _isOpenMeta = const VerificationMeta('isOpen');
+  @override
+  late final GeneratedColumn<bool> isOpen = GeneratedColumn<bool>(
+    'is_open',
+    aliasedName,
+    true,
+    type: DriftSqlType.bool,
+    requiredDuringInsert: false,
+    defaultConstraints: GeneratedColumn.constraintIsAlways(
+      'CHECK ("is_open" IN (0, 1))',
+    ),
+  );
+  static const VerificationMeta _categoryMeta = const VerificationMeta(
+    'category',
+  );
+  @override
+  late final GeneratedColumn<String> category = GeneratedColumn<String>(
+    'category',
+    aliasedName,
+    true,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+  );
+  static const VerificationMeta _subcategoryMeta = const VerificationMeta(
+    'subcategory',
+  );
+  @override
+  late final GeneratedColumn<String> subcategory = GeneratedColumn<String>(
+    'subcategory',
+    aliasedName,
+    true,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+  );
+  static const VerificationMeta _openingHoursMeta = const VerificationMeta(
+    'openingHours',
+  );
+  @override
+  late final GeneratedColumn<String> openingHours = GeneratedColumn<String>(
+    'opening_hours',
+    aliasedName,
+    true,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+  );
+  static const VerificationMeta _photosMeta = const VerificationMeta('photos');
+  @override
+  late final GeneratedColumn<String> photos = GeneratedColumn<String>(
+    'photos',
+    aliasedName,
+    true,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+  );
+  static const VerificationMeta _descriptionMeta = const VerificationMeta(
+    'description',
+  );
+  @override
+  late final GeneratedColumn<String> description = GeneratedColumn<String>(
+    'description',
+    aliasedName,
+    true,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+  );
+  static const VerificationMeta _lastUpdatedMeta = const VerificationMeta(
+    'lastUpdated',
+  );
+  @override
+  late final GeneratedColumn<DateTime> lastUpdated = GeneratedColumn<DateTime>(
+    'last_updated',
+    aliasedName,
+    false,
+    type: DriftSqlType.dateTime,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _detailsUpdatedMeta = const VerificationMeta(
+    'detailsUpdated',
+  );
+  @override
+  late final GeneratedColumn<DateTime> detailsUpdated =
+      GeneratedColumn<DateTime>(
+        'details_updated',
+        aliasedName,
+        true,
+        type: DriftSqlType.dateTime,
+        requiredDuringInsert: false,
+      );
+  static const VerificationMeta _ratingUpdatedMeta = const VerificationMeta(
+    'ratingUpdated',
+  );
+  @override
+  late final GeneratedColumn<DateTime> ratingUpdated =
+      GeneratedColumn<DateTime>(
+        'rating_updated',
+        aliasedName,
+        true,
+        type: DriftSqlType.dateTime,
+        requiredDuringInsert: false,
+      );
+  static const VerificationMeta _openingStatusUpdatedMeta =
+      const VerificationMeta('openingStatusUpdated');
+  @override
+  late final GeneratedColumn<DateTime> openingStatusUpdated =
+      GeneratedColumn<DateTime>(
+        'opening_status_updated',
+        aliasedName,
+        true,
+        type: DriftSqlType.dateTime,
+        requiredDuringInsert: false,
+      );
+  @override
+  List<GeneratedColumn> get $columns => [
+    googlePlaceId,
+    provider,
+    name,
+    latitude,
+    longitude,
+    address,
+    phoneNumber,
+    website,
+    rating,
+    reviewCount,
+    isOpen,
+    category,
+    subcategory,
+    openingHours,
+    photos,
+    description,
+    lastUpdated,
+    detailsUpdated,
+    ratingUpdated,
+    openingStatusUpdated,
+  ];
+  @override
+  String get aliasedName => _alias ?? actualTableName;
+  @override
+  String get actualTableName => $name;
+  static const String $name = 'cached_places';
+  @override
+  VerificationContext validateIntegrity(
+    Insertable<CachedPlace> instance, {
+    bool isInserting = false,
+  }) {
+    final context = VerificationContext();
+    final data = instance.toColumns(true);
+    if (data.containsKey('google_place_id')) {
+      context.handle(
+        _googlePlaceIdMeta,
+        googlePlaceId.isAcceptableOrUnknown(
+          data['google_place_id']!,
+          _googlePlaceIdMeta,
+        ),
+      );
+    } else if (isInserting) {
+      context.missing(_googlePlaceIdMeta);
+    }
+    if (data.containsKey('provider')) {
+      context.handle(
+        _providerMeta,
+        provider.isAcceptableOrUnknown(data['provider']!, _providerMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_providerMeta);
+    }
+    if (data.containsKey('name')) {
+      context.handle(
+        _nameMeta,
+        name.isAcceptableOrUnknown(data['name']!, _nameMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_nameMeta);
+    }
+    if (data.containsKey('latitude')) {
+      context.handle(
+        _latitudeMeta,
+        latitude.isAcceptableOrUnknown(data['latitude']!, _latitudeMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_latitudeMeta);
+    }
+    if (data.containsKey('longitude')) {
+      context.handle(
+        _longitudeMeta,
+        longitude.isAcceptableOrUnknown(data['longitude']!, _longitudeMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_longitudeMeta);
+    }
+    if (data.containsKey('address')) {
+      context.handle(
+        _addressMeta,
+        address.isAcceptableOrUnknown(data['address']!, _addressMeta),
+      );
+    }
+    if (data.containsKey('phone_number')) {
+      context.handle(
+        _phoneNumberMeta,
+        phoneNumber.isAcceptableOrUnknown(
+          data['phone_number']!,
+          _phoneNumberMeta,
+        ),
+      );
+    }
+    if (data.containsKey('website')) {
+      context.handle(
+        _websiteMeta,
+        website.isAcceptableOrUnknown(data['website']!, _websiteMeta),
+      );
+    }
+    if (data.containsKey('rating')) {
+      context.handle(
+        _ratingMeta,
+        rating.isAcceptableOrUnknown(data['rating']!, _ratingMeta),
+      );
+    }
+    if (data.containsKey('review_count')) {
+      context.handle(
+        _reviewCountMeta,
+        reviewCount.isAcceptableOrUnknown(
+          data['review_count']!,
+          _reviewCountMeta,
+        ),
+      );
+    }
+    if (data.containsKey('is_open')) {
+      context.handle(
+        _isOpenMeta,
+        isOpen.isAcceptableOrUnknown(data['is_open']!, _isOpenMeta),
+      );
+    }
+    if (data.containsKey('category')) {
+      context.handle(
+        _categoryMeta,
+        category.isAcceptableOrUnknown(data['category']!, _categoryMeta),
+      );
+    }
+    if (data.containsKey('subcategory')) {
+      context.handle(
+        _subcategoryMeta,
+        subcategory.isAcceptableOrUnknown(
+          data['subcategory']!,
+          _subcategoryMeta,
+        ),
+      );
+    }
+    if (data.containsKey('opening_hours')) {
+      context.handle(
+        _openingHoursMeta,
+        openingHours.isAcceptableOrUnknown(
+          data['opening_hours']!,
+          _openingHoursMeta,
+        ),
+      );
+    }
+    if (data.containsKey('photos')) {
+      context.handle(
+        _photosMeta,
+        photos.isAcceptableOrUnknown(data['photos']!, _photosMeta),
+      );
+    }
+    if (data.containsKey('description')) {
+      context.handle(
+        _descriptionMeta,
+        description.isAcceptableOrUnknown(
+          data['description']!,
+          _descriptionMeta,
+        ),
+      );
+    }
+    if (data.containsKey('last_updated')) {
+      context.handle(
+        _lastUpdatedMeta,
+        lastUpdated.isAcceptableOrUnknown(
+          data['last_updated']!,
+          _lastUpdatedMeta,
+        ),
+      );
+    } else if (isInserting) {
+      context.missing(_lastUpdatedMeta);
+    }
+    if (data.containsKey('details_updated')) {
+      context.handle(
+        _detailsUpdatedMeta,
+        detailsUpdated.isAcceptableOrUnknown(
+          data['details_updated']!,
+          _detailsUpdatedMeta,
+        ),
+      );
+    }
+    if (data.containsKey('rating_updated')) {
+      context.handle(
+        _ratingUpdatedMeta,
+        ratingUpdated.isAcceptableOrUnknown(
+          data['rating_updated']!,
+          _ratingUpdatedMeta,
+        ),
+      );
+    }
+    if (data.containsKey('opening_status_updated')) {
+      context.handle(
+        _openingStatusUpdatedMeta,
+        openingStatusUpdated.isAcceptableOrUnknown(
+          data['opening_status_updated']!,
+          _openingStatusUpdatedMeta,
+        ),
+      );
+    }
+    return context;
+  }
+
+  @override
+  Set<GeneratedColumn> get $primaryKey => {googlePlaceId};
+  @override
+  CachedPlace map(Map<String, dynamic> data, {String? tablePrefix}) {
+    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
+    return CachedPlace(
+      googlePlaceId: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}google_place_id'],
+      )!,
+      provider: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}provider'],
+      )!,
+      name: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}name'],
+      )!,
+      latitude: attachedDatabase.typeMapping.read(
+        DriftSqlType.double,
+        data['${effectivePrefix}latitude'],
+      )!,
+      longitude: attachedDatabase.typeMapping.read(
+        DriftSqlType.double,
+        data['${effectivePrefix}longitude'],
+      )!,
+      address: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}address'],
+      ),
+      phoneNumber: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}phone_number'],
+      ),
+      website: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}website'],
+      ),
+      rating: attachedDatabase.typeMapping.read(
+        DriftSqlType.double,
+        data['${effectivePrefix}rating'],
+      ),
+      reviewCount: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}review_count'],
+      ),
+      isOpen: attachedDatabase.typeMapping.read(
+        DriftSqlType.bool,
+        data['${effectivePrefix}is_open'],
+      ),
+      category: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}category'],
+      ),
+      subcategory: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}subcategory'],
+      ),
+      openingHours: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}opening_hours'],
+      ),
+      photos: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}photos'],
+      ),
+      description: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}description'],
+      ),
+      lastUpdated: attachedDatabase.typeMapping.read(
+        DriftSqlType.dateTime,
+        data['${effectivePrefix}last_updated'],
+      )!,
+      detailsUpdated: attachedDatabase.typeMapping.read(
+        DriftSqlType.dateTime,
+        data['${effectivePrefix}details_updated'],
+      ),
+      ratingUpdated: attachedDatabase.typeMapping.read(
+        DriftSqlType.dateTime,
+        data['${effectivePrefix}rating_updated'],
+      ),
+      openingStatusUpdated: attachedDatabase.typeMapping.read(
+        DriftSqlType.dateTime,
+        data['${effectivePrefix}opening_status_updated'],
+      ),
+    );
+  }
+
+  @override
+  $CachedPlacesTable createAlias(String alias) {
+    return $CachedPlacesTable(attachedDatabase, alias);
+  }
+}
+
+class CachedPlace extends DataClass implements Insertable<CachedPlace> {
+  final String googlePlaceId;
+  final String provider;
+  final String name;
+  final double latitude;
+  final double longitude;
+  final String? address;
+  final String? phoneNumber;
+  final String? website;
+  final double? rating;
+  final int? reviewCount;
+  final bool? isOpen;
+  final String? category;
+  final String? subcategory;
+  final String? openingHours;
+  final String? photos;
+  final String? description;
+  final DateTime lastUpdated;
+  final DateTime? detailsUpdated;
+  final DateTime? ratingUpdated;
+  final DateTime? openingStatusUpdated;
+  const CachedPlace({
+    required this.googlePlaceId,
+    required this.provider,
+    required this.name,
+    required this.latitude,
+    required this.longitude,
+    this.address,
+    this.phoneNumber,
+    this.website,
+    this.rating,
+    this.reviewCount,
+    this.isOpen,
+    this.category,
+    this.subcategory,
+    this.openingHours,
+    this.photos,
+    this.description,
+    required this.lastUpdated,
+    this.detailsUpdated,
+    this.ratingUpdated,
+    this.openingStatusUpdated,
+  });
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    map['google_place_id'] = Variable<String>(googlePlaceId);
+    map['provider'] = Variable<String>(provider);
+    map['name'] = Variable<String>(name);
+    map['latitude'] = Variable<double>(latitude);
+    map['longitude'] = Variable<double>(longitude);
+    if (!nullToAbsent || address != null) {
+      map['address'] = Variable<String>(address);
+    }
+    if (!nullToAbsent || phoneNumber != null) {
+      map['phone_number'] = Variable<String>(phoneNumber);
+    }
+    if (!nullToAbsent || website != null) {
+      map['website'] = Variable<String>(website);
+    }
+    if (!nullToAbsent || rating != null) {
+      map['rating'] = Variable<double>(rating);
+    }
+    if (!nullToAbsent || reviewCount != null) {
+      map['review_count'] = Variable<int>(reviewCount);
+    }
+    if (!nullToAbsent || isOpen != null) {
+      map['is_open'] = Variable<bool>(isOpen);
+    }
+    if (!nullToAbsent || category != null) {
+      map['category'] = Variable<String>(category);
+    }
+    if (!nullToAbsent || subcategory != null) {
+      map['subcategory'] = Variable<String>(subcategory);
+    }
+    if (!nullToAbsent || openingHours != null) {
+      map['opening_hours'] = Variable<String>(openingHours);
+    }
+    if (!nullToAbsent || photos != null) {
+      map['photos'] = Variable<String>(photos);
+    }
+    if (!nullToAbsent || description != null) {
+      map['description'] = Variable<String>(description);
+    }
+    map['last_updated'] = Variable<DateTime>(lastUpdated);
+    if (!nullToAbsent || detailsUpdated != null) {
+      map['details_updated'] = Variable<DateTime>(detailsUpdated);
+    }
+    if (!nullToAbsent || ratingUpdated != null) {
+      map['rating_updated'] = Variable<DateTime>(ratingUpdated);
+    }
+    if (!nullToAbsent || openingStatusUpdated != null) {
+      map['opening_status_updated'] = Variable<DateTime>(openingStatusUpdated);
+    }
+    return map;
+  }
+
+  CachedPlacesCompanion toCompanion(bool nullToAbsent) {
+    return CachedPlacesCompanion(
+      googlePlaceId: Value(googlePlaceId),
+      provider: Value(provider),
+      name: Value(name),
+      latitude: Value(latitude),
+      longitude: Value(longitude),
+      address: address == null && nullToAbsent
+          ? const Value.absent()
+          : Value(address),
+      phoneNumber: phoneNumber == null && nullToAbsent
+          ? const Value.absent()
+          : Value(phoneNumber),
+      website: website == null && nullToAbsent
+          ? const Value.absent()
+          : Value(website),
+      rating: rating == null && nullToAbsent
+          ? const Value.absent()
+          : Value(rating),
+      reviewCount: reviewCount == null && nullToAbsent
+          ? const Value.absent()
+          : Value(reviewCount),
+      isOpen: isOpen == null && nullToAbsent
+          ? const Value.absent()
+          : Value(isOpen),
+      category: category == null && nullToAbsent
+          ? const Value.absent()
+          : Value(category),
+      subcategory: subcategory == null && nullToAbsent
+          ? const Value.absent()
+          : Value(subcategory),
+      openingHours: openingHours == null && nullToAbsent
+          ? const Value.absent()
+          : Value(openingHours),
+      photos: photos == null && nullToAbsent
+          ? const Value.absent()
+          : Value(photos),
+      description: description == null && nullToAbsent
+          ? const Value.absent()
+          : Value(description),
+      lastUpdated: Value(lastUpdated),
+      detailsUpdated: detailsUpdated == null && nullToAbsent
+          ? const Value.absent()
+          : Value(detailsUpdated),
+      ratingUpdated: ratingUpdated == null && nullToAbsent
+          ? const Value.absent()
+          : Value(ratingUpdated),
+      openingStatusUpdated: openingStatusUpdated == null && nullToAbsent
+          ? const Value.absent()
+          : Value(openingStatusUpdated),
+    );
+  }
+
+  factory CachedPlace.fromJson(
+    Map<String, dynamic> json, {
+    ValueSerializer? serializer,
+  }) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return CachedPlace(
+      googlePlaceId: serializer.fromJson<String>(json['googlePlaceId']),
+      provider: serializer.fromJson<String>(json['provider']),
+      name: serializer.fromJson<String>(json['name']),
+      latitude: serializer.fromJson<double>(json['latitude']),
+      longitude: serializer.fromJson<double>(json['longitude']),
+      address: serializer.fromJson<String?>(json['address']),
+      phoneNumber: serializer.fromJson<String?>(json['phoneNumber']),
+      website: serializer.fromJson<String?>(json['website']),
+      rating: serializer.fromJson<double?>(json['rating']),
+      reviewCount: serializer.fromJson<int?>(json['reviewCount']),
+      isOpen: serializer.fromJson<bool?>(json['isOpen']),
+      category: serializer.fromJson<String?>(json['category']),
+      subcategory: serializer.fromJson<String?>(json['subcategory']),
+      openingHours: serializer.fromJson<String?>(json['openingHours']),
+      photos: serializer.fromJson<String?>(json['photos']),
+      description: serializer.fromJson<String?>(json['description']),
+      lastUpdated: serializer.fromJson<DateTime>(json['lastUpdated']),
+      detailsUpdated: serializer.fromJson<DateTime?>(json['detailsUpdated']),
+      ratingUpdated: serializer.fromJson<DateTime?>(json['ratingUpdated']),
+      openingStatusUpdated: serializer.fromJson<DateTime?>(
+        json['openingStatusUpdated'],
+      ),
+    );
+  }
+  @override
+  Map<String, dynamic> toJson({ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return <String, dynamic>{
+      'googlePlaceId': serializer.toJson<String>(googlePlaceId),
+      'provider': serializer.toJson<String>(provider),
+      'name': serializer.toJson<String>(name),
+      'latitude': serializer.toJson<double>(latitude),
+      'longitude': serializer.toJson<double>(longitude),
+      'address': serializer.toJson<String?>(address),
+      'phoneNumber': serializer.toJson<String?>(phoneNumber),
+      'website': serializer.toJson<String?>(website),
+      'rating': serializer.toJson<double?>(rating),
+      'reviewCount': serializer.toJson<int?>(reviewCount),
+      'isOpen': serializer.toJson<bool?>(isOpen),
+      'category': serializer.toJson<String?>(category),
+      'subcategory': serializer.toJson<String?>(subcategory),
+      'openingHours': serializer.toJson<String?>(openingHours),
+      'photos': serializer.toJson<String?>(photos),
+      'description': serializer.toJson<String?>(description),
+      'lastUpdated': serializer.toJson<DateTime>(lastUpdated),
+      'detailsUpdated': serializer.toJson<DateTime?>(detailsUpdated),
+      'ratingUpdated': serializer.toJson<DateTime?>(ratingUpdated),
+      'openingStatusUpdated': serializer.toJson<DateTime?>(
+        openingStatusUpdated,
+      ),
+    };
+  }
+
+  CachedPlace copyWith({
+    String? googlePlaceId,
+    String? provider,
+    String? name,
+    double? latitude,
+    double? longitude,
+    Value<String?> address = const Value.absent(),
+    Value<String?> phoneNumber = const Value.absent(),
+    Value<String?> website = const Value.absent(),
+    Value<double?> rating = const Value.absent(),
+    Value<int?> reviewCount = const Value.absent(),
+    Value<bool?> isOpen = const Value.absent(),
+    Value<String?> category = const Value.absent(),
+    Value<String?> subcategory = const Value.absent(),
+    Value<String?> openingHours = const Value.absent(),
+    Value<String?> photos = const Value.absent(),
+    Value<String?> description = const Value.absent(),
+    DateTime? lastUpdated,
+    Value<DateTime?> detailsUpdated = const Value.absent(),
+    Value<DateTime?> ratingUpdated = const Value.absent(),
+    Value<DateTime?> openingStatusUpdated = const Value.absent(),
+  }) => CachedPlace(
+    googlePlaceId: googlePlaceId ?? this.googlePlaceId,
+    provider: provider ?? this.provider,
+    name: name ?? this.name,
+    latitude: latitude ?? this.latitude,
+    longitude: longitude ?? this.longitude,
+    address: address.present ? address.value : this.address,
+    phoneNumber: phoneNumber.present ? phoneNumber.value : this.phoneNumber,
+    website: website.present ? website.value : this.website,
+    rating: rating.present ? rating.value : this.rating,
+    reviewCount: reviewCount.present ? reviewCount.value : this.reviewCount,
+    isOpen: isOpen.present ? isOpen.value : this.isOpen,
+    category: category.present ? category.value : this.category,
+    subcategory: subcategory.present ? subcategory.value : this.subcategory,
+    openingHours: openingHours.present ? openingHours.value : this.openingHours,
+    photos: photos.present ? photos.value : this.photos,
+    description: description.present ? description.value : this.description,
+    lastUpdated: lastUpdated ?? this.lastUpdated,
+    detailsUpdated: detailsUpdated.present
+        ? detailsUpdated.value
+        : this.detailsUpdated,
+    ratingUpdated: ratingUpdated.present
+        ? ratingUpdated.value
+        : this.ratingUpdated,
+    openingStatusUpdated: openingStatusUpdated.present
+        ? openingStatusUpdated.value
+        : this.openingStatusUpdated,
+  );
+  CachedPlace copyWithCompanion(CachedPlacesCompanion data) {
+    return CachedPlace(
+      googlePlaceId: data.googlePlaceId.present
+          ? data.googlePlaceId.value
+          : this.googlePlaceId,
+      provider: data.provider.present ? data.provider.value : this.provider,
+      name: data.name.present ? data.name.value : this.name,
+      latitude: data.latitude.present ? data.latitude.value : this.latitude,
+      longitude: data.longitude.present ? data.longitude.value : this.longitude,
+      address: data.address.present ? data.address.value : this.address,
+      phoneNumber: data.phoneNumber.present
+          ? data.phoneNumber.value
+          : this.phoneNumber,
+      website: data.website.present ? data.website.value : this.website,
+      rating: data.rating.present ? data.rating.value : this.rating,
+      reviewCount: data.reviewCount.present
+          ? data.reviewCount.value
+          : this.reviewCount,
+      isOpen: data.isOpen.present ? data.isOpen.value : this.isOpen,
+      category: data.category.present ? data.category.value : this.category,
+      subcategory: data.subcategory.present
+          ? data.subcategory.value
+          : this.subcategory,
+      openingHours: data.openingHours.present
+          ? data.openingHours.value
+          : this.openingHours,
+      photos: data.photos.present ? data.photos.value : this.photos,
+      description: data.description.present
+          ? data.description.value
+          : this.description,
+      lastUpdated: data.lastUpdated.present
+          ? data.lastUpdated.value
+          : this.lastUpdated,
+      detailsUpdated: data.detailsUpdated.present
+          ? data.detailsUpdated.value
+          : this.detailsUpdated,
+      ratingUpdated: data.ratingUpdated.present
+          ? data.ratingUpdated.value
+          : this.ratingUpdated,
+      openingStatusUpdated: data.openingStatusUpdated.present
+          ? data.openingStatusUpdated.value
+          : this.openingStatusUpdated,
+    );
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('CachedPlace(')
+          ..write('googlePlaceId: $googlePlaceId, ')
+          ..write('provider: $provider, ')
+          ..write('name: $name, ')
+          ..write('latitude: $latitude, ')
+          ..write('longitude: $longitude, ')
+          ..write('address: $address, ')
+          ..write('phoneNumber: $phoneNumber, ')
+          ..write('website: $website, ')
+          ..write('rating: $rating, ')
+          ..write('reviewCount: $reviewCount, ')
+          ..write('isOpen: $isOpen, ')
+          ..write('category: $category, ')
+          ..write('subcategory: $subcategory, ')
+          ..write('openingHours: $openingHours, ')
+          ..write('photos: $photos, ')
+          ..write('description: $description, ')
+          ..write('lastUpdated: $lastUpdated, ')
+          ..write('detailsUpdated: $detailsUpdated, ')
+          ..write('ratingUpdated: $ratingUpdated, ')
+          ..write('openingStatusUpdated: $openingStatusUpdated')
+          ..write(')'))
+        .toString();
+  }
+
+  @override
+  int get hashCode => Object.hash(
+    googlePlaceId,
+    provider,
+    name,
+    latitude,
+    longitude,
+    address,
+    phoneNumber,
+    website,
+    rating,
+    reviewCount,
+    isOpen,
+    category,
+    subcategory,
+    openingHours,
+    photos,
+    description,
+    lastUpdated,
+    detailsUpdated,
+    ratingUpdated,
+    openingStatusUpdated,
+  );
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      (other is CachedPlace &&
+          other.googlePlaceId == this.googlePlaceId &&
+          other.provider == this.provider &&
+          other.name == this.name &&
+          other.latitude == this.latitude &&
+          other.longitude == this.longitude &&
+          other.address == this.address &&
+          other.phoneNumber == this.phoneNumber &&
+          other.website == this.website &&
+          other.rating == this.rating &&
+          other.reviewCount == this.reviewCount &&
+          other.isOpen == this.isOpen &&
+          other.category == this.category &&
+          other.subcategory == this.subcategory &&
+          other.openingHours == this.openingHours &&
+          other.photos == this.photos &&
+          other.description == this.description &&
+          other.lastUpdated == this.lastUpdated &&
+          other.detailsUpdated == this.detailsUpdated &&
+          other.ratingUpdated == this.ratingUpdated &&
+          other.openingStatusUpdated == this.openingStatusUpdated);
+}
+
+class CachedPlacesCompanion extends UpdateCompanion<CachedPlace> {
+  final Value<String> googlePlaceId;
+  final Value<String> provider;
+  final Value<String> name;
+  final Value<double> latitude;
+  final Value<double> longitude;
+  final Value<String?> address;
+  final Value<String?> phoneNumber;
+  final Value<String?> website;
+  final Value<double?> rating;
+  final Value<int?> reviewCount;
+  final Value<bool?> isOpen;
+  final Value<String?> category;
+  final Value<String?> subcategory;
+  final Value<String?> openingHours;
+  final Value<String?> photos;
+  final Value<String?> description;
+  final Value<DateTime> lastUpdated;
+  final Value<DateTime?> detailsUpdated;
+  final Value<DateTime?> ratingUpdated;
+  final Value<DateTime?> openingStatusUpdated;
+  final Value<int> rowid;
+  const CachedPlacesCompanion({
+    this.googlePlaceId = const Value.absent(),
+    this.provider = const Value.absent(),
+    this.name = const Value.absent(),
+    this.latitude = const Value.absent(),
+    this.longitude = const Value.absent(),
+    this.address = const Value.absent(),
+    this.phoneNumber = const Value.absent(),
+    this.website = const Value.absent(),
+    this.rating = const Value.absent(),
+    this.reviewCount = const Value.absent(),
+    this.isOpen = const Value.absent(),
+    this.category = const Value.absent(),
+    this.subcategory = const Value.absent(),
+    this.openingHours = const Value.absent(),
+    this.photos = const Value.absent(),
+    this.description = const Value.absent(),
+    this.lastUpdated = const Value.absent(),
+    this.detailsUpdated = const Value.absent(),
+    this.ratingUpdated = const Value.absent(),
+    this.openingStatusUpdated = const Value.absent(),
+    this.rowid = const Value.absent(),
+  });
+  CachedPlacesCompanion.insert({
+    required String googlePlaceId,
+    required String provider,
+    required String name,
+    required double latitude,
+    required double longitude,
+    this.address = const Value.absent(),
+    this.phoneNumber = const Value.absent(),
+    this.website = const Value.absent(),
+    this.rating = const Value.absent(),
+    this.reviewCount = const Value.absent(),
+    this.isOpen = const Value.absent(),
+    this.category = const Value.absent(),
+    this.subcategory = const Value.absent(),
+    this.openingHours = const Value.absent(),
+    this.photos = const Value.absent(),
+    this.description = const Value.absent(),
+    required DateTime lastUpdated,
+    this.detailsUpdated = const Value.absent(),
+    this.ratingUpdated = const Value.absent(),
+    this.openingStatusUpdated = const Value.absent(),
+    this.rowid = const Value.absent(),
+  }) : googlePlaceId = Value(googlePlaceId),
+       provider = Value(provider),
+       name = Value(name),
+       latitude = Value(latitude),
+       longitude = Value(longitude),
+       lastUpdated = Value(lastUpdated);
+  static Insertable<CachedPlace> custom({
+    Expression<String>? googlePlaceId,
+    Expression<String>? provider,
+    Expression<String>? name,
+    Expression<double>? latitude,
+    Expression<double>? longitude,
+    Expression<String>? address,
+    Expression<String>? phoneNumber,
+    Expression<String>? website,
+    Expression<double>? rating,
+    Expression<int>? reviewCount,
+    Expression<bool>? isOpen,
+    Expression<String>? category,
+    Expression<String>? subcategory,
+    Expression<String>? openingHours,
+    Expression<String>? photos,
+    Expression<String>? description,
+    Expression<DateTime>? lastUpdated,
+    Expression<DateTime>? detailsUpdated,
+    Expression<DateTime>? ratingUpdated,
+    Expression<DateTime>? openingStatusUpdated,
+    Expression<int>? rowid,
+  }) {
+    return RawValuesInsertable({
+      if (googlePlaceId != null) 'google_place_id': googlePlaceId,
+      if (provider != null) 'provider': provider,
+      if (name != null) 'name': name,
+      if (latitude != null) 'latitude': latitude,
+      if (longitude != null) 'longitude': longitude,
+      if (address != null) 'address': address,
+      if (phoneNumber != null) 'phone_number': phoneNumber,
+      if (website != null) 'website': website,
+      if (rating != null) 'rating': rating,
+      if (reviewCount != null) 'review_count': reviewCount,
+      if (isOpen != null) 'is_open': isOpen,
+      if (category != null) 'category': category,
+      if (subcategory != null) 'subcategory': subcategory,
+      if (openingHours != null) 'opening_hours': openingHours,
+      if (photos != null) 'photos': photos,
+      if (description != null) 'description': description,
+      if (lastUpdated != null) 'last_updated': lastUpdated,
+      if (detailsUpdated != null) 'details_updated': detailsUpdated,
+      if (ratingUpdated != null) 'rating_updated': ratingUpdated,
+      if (openingStatusUpdated != null)
+        'opening_status_updated': openingStatusUpdated,
+      if (rowid != null) 'rowid': rowid,
+    });
+  }
+
+  CachedPlacesCompanion copyWith({
+    Value<String>? googlePlaceId,
+    Value<String>? provider,
+    Value<String>? name,
+    Value<double>? latitude,
+    Value<double>? longitude,
+    Value<String?>? address,
+    Value<String?>? phoneNumber,
+    Value<String?>? website,
+    Value<double?>? rating,
+    Value<int?>? reviewCount,
+    Value<bool?>? isOpen,
+    Value<String?>? category,
+    Value<String?>? subcategory,
+    Value<String?>? openingHours,
+    Value<String?>? photos,
+    Value<String?>? description,
+    Value<DateTime>? lastUpdated,
+    Value<DateTime?>? detailsUpdated,
+    Value<DateTime?>? ratingUpdated,
+    Value<DateTime?>? openingStatusUpdated,
+    Value<int>? rowid,
+  }) {
+    return CachedPlacesCompanion(
+      googlePlaceId: googlePlaceId ?? this.googlePlaceId,
+      provider: provider ?? this.provider,
+      name: name ?? this.name,
+      latitude: latitude ?? this.latitude,
+      longitude: longitude ?? this.longitude,
+      address: address ?? this.address,
+      phoneNumber: phoneNumber ?? this.phoneNumber,
+      website: website ?? this.website,
+      rating: rating ?? this.rating,
+      reviewCount: reviewCount ?? this.reviewCount,
+      isOpen: isOpen ?? this.isOpen,
+      category: category ?? this.category,
+      subcategory: subcategory ?? this.subcategory,
+      openingHours: openingHours ?? this.openingHours,
+      photos: photos ?? this.photos,
+      description: description ?? this.description,
+      lastUpdated: lastUpdated ?? this.lastUpdated,
+      detailsUpdated: detailsUpdated ?? this.detailsUpdated,
+      ratingUpdated: ratingUpdated ?? this.ratingUpdated,
+      openingStatusUpdated: openingStatusUpdated ?? this.openingStatusUpdated,
+      rowid: rowid ?? this.rowid,
+    );
+  }
+
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (googlePlaceId.present) {
+      map['google_place_id'] = Variable<String>(googlePlaceId.value);
+    }
+    if (provider.present) {
+      map['provider'] = Variable<String>(provider.value);
+    }
+    if (name.present) {
+      map['name'] = Variable<String>(name.value);
+    }
+    if (latitude.present) {
+      map['latitude'] = Variable<double>(latitude.value);
+    }
+    if (longitude.present) {
+      map['longitude'] = Variable<double>(longitude.value);
+    }
+    if (address.present) {
+      map['address'] = Variable<String>(address.value);
+    }
+    if (phoneNumber.present) {
+      map['phone_number'] = Variable<String>(phoneNumber.value);
+    }
+    if (website.present) {
+      map['website'] = Variable<String>(website.value);
+    }
+    if (rating.present) {
+      map['rating'] = Variable<double>(rating.value);
+    }
+    if (reviewCount.present) {
+      map['review_count'] = Variable<int>(reviewCount.value);
+    }
+    if (isOpen.present) {
+      map['is_open'] = Variable<bool>(isOpen.value);
+    }
+    if (category.present) {
+      map['category'] = Variable<String>(category.value);
+    }
+    if (subcategory.present) {
+      map['subcategory'] = Variable<String>(subcategory.value);
+    }
+    if (openingHours.present) {
+      map['opening_hours'] = Variable<String>(openingHours.value);
+    }
+    if (photos.present) {
+      map['photos'] = Variable<String>(photos.value);
+    }
+    if (description.present) {
+      map['description'] = Variable<String>(description.value);
+    }
+    if (lastUpdated.present) {
+      map['last_updated'] = Variable<DateTime>(lastUpdated.value);
+    }
+    if (detailsUpdated.present) {
+      map['details_updated'] = Variable<DateTime>(detailsUpdated.value);
+    }
+    if (ratingUpdated.present) {
+      map['rating_updated'] = Variable<DateTime>(ratingUpdated.value);
+    }
+    if (openingStatusUpdated.present) {
+      map['opening_status_updated'] = Variable<DateTime>(
+        openingStatusUpdated.value,
+      );
+    }
+    if (rowid.present) {
+      map['rowid'] = Variable<int>(rowid.value);
+    }
+    return map;
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('CachedPlacesCompanion(')
+          ..write('googlePlaceId: $googlePlaceId, ')
+          ..write('provider: $provider, ')
+          ..write('name: $name, ')
+          ..write('latitude: $latitude, ')
+          ..write('longitude: $longitude, ')
+          ..write('address: $address, ')
+          ..write('phoneNumber: $phoneNumber, ')
+          ..write('website: $website, ')
+          ..write('rating: $rating, ')
+          ..write('reviewCount: $reviewCount, ')
+          ..write('isOpen: $isOpen, ')
+          ..write('category: $category, ')
+          ..write('subcategory: $subcategory, ')
+          ..write('openingHours: $openingHours, ')
+          ..write('photos: $photos, ')
+          ..write('description: $description, ')
+          ..write('lastUpdated: $lastUpdated, ')
+          ..write('detailsUpdated: $detailsUpdated, ')
+          ..write('ratingUpdated: $ratingUpdated, ')
+          ..write('openingStatusUpdated: $openingStatusUpdated, ')
+          ..write('rowid: $rowid')
+          ..write(')'))
+        .toString();
+  }
+}
+
 abstract class _$AppDatabase extends GeneratedDatabase {
   _$AppDatabase(QueryExecutor e) : super(e);
   $AppDatabaseManager get managers => $AppDatabaseManager(this);
@@ -1782,6 +2949,7 @@ abstract class _$AppDatabase extends GeneratedDatabase {
   late final $CategoryPreferencesTable categoryPreferences =
       $CategoryPreferencesTable(this);
   late final $AppSettingsTable appSettings = $AppSettingsTable(this);
+  late final $CachedPlacesTable cachedPlaces = $CachedPlacesTable(this);
   @override
   Iterable<TableInfo<Table, Object?>> get allTables =>
       allSchemaEntities.whereType<TableInfo<Table, Object?>>();
@@ -1791,6 +2959,7 @@ abstract class _$AppDatabase extends GeneratedDatabase {
     searchHistoryEntries,
     categoryPreferences,
     appSettings,
+    cachedPlaces,
   ];
 }
 
@@ -2790,6 +3959,520 @@ typedef $$AppSettingsTableProcessedTableManager =
       AppSetting,
       PrefetchHooks Function()
     >;
+typedef $$CachedPlacesTableCreateCompanionBuilder =
+    CachedPlacesCompanion Function({
+      required String googlePlaceId,
+      required String provider,
+      required String name,
+      required double latitude,
+      required double longitude,
+      Value<String?> address,
+      Value<String?> phoneNumber,
+      Value<String?> website,
+      Value<double?> rating,
+      Value<int?> reviewCount,
+      Value<bool?> isOpen,
+      Value<String?> category,
+      Value<String?> subcategory,
+      Value<String?> openingHours,
+      Value<String?> photos,
+      Value<String?> description,
+      required DateTime lastUpdated,
+      Value<DateTime?> detailsUpdated,
+      Value<DateTime?> ratingUpdated,
+      Value<DateTime?> openingStatusUpdated,
+      Value<int> rowid,
+    });
+typedef $$CachedPlacesTableUpdateCompanionBuilder =
+    CachedPlacesCompanion Function({
+      Value<String> googlePlaceId,
+      Value<String> provider,
+      Value<String> name,
+      Value<double> latitude,
+      Value<double> longitude,
+      Value<String?> address,
+      Value<String?> phoneNumber,
+      Value<String?> website,
+      Value<double?> rating,
+      Value<int?> reviewCount,
+      Value<bool?> isOpen,
+      Value<String?> category,
+      Value<String?> subcategory,
+      Value<String?> openingHours,
+      Value<String?> photos,
+      Value<String?> description,
+      Value<DateTime> lastUpdated,
+      Value<DateTime?> detailsUpdated,
+      Value<DateTime?> ratingUpdated,
+      Value<DateTime?> openingStatusUpdated,
+      Value<int> rowid,
+    });
+
+class $$CachedPlacesTableFilterComposer
+    extends Composer<_$AppDatabase, $CachedPlacesTable> {
+  $$CachedPlacesTableFilterComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnFilters<String> get googlePlaceId => $composableBuilder(
+    column: $table.googlePlaceId,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get provider => $composableBuilder(
+    column: $table.provider,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get name => $composableBuilder(
+    column: $table.name,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<double> get latitude => $composableBuilder(
+    column: $table.latitude,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<double> get longitude => $composableBuilder(
+    column: $table.longitude,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get address => $composableBuilder(
+    column: $table.address,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get phoneNumber => $composableBuilder(
+    column: $table.phoneNumber,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get website => $composableBuilder(
+    column: $table.website,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<double> get rating => $composableBuilder(
+    column: $table.rating,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<int> get reviewCount => $composableBuilder(
+    column: $table.reviewCount,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<bool> get isOpen => $composableBuilder(
+    column: $table.isOpen,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get category => $composableBuilder(
+    column: $table.category,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get subcategory => $composableBuilder(
+    column: $table.subcategory,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get openingHours => $composableBuilder(
+    column: $table.openingHours,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get photos => $composableBuilder(
+    column: $table.photos,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get description => $composableBuilder(
+    column: $table.description,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<DateTime> get lastUpdated => $composableBuilder(
+    column: $table.lastUpdated,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<DateTime> get detailsUpdated => $composableBuilder(
+    column: $table.detailsUpdated,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<DateTime> get ratingUpdated => $composableBuilder(
+    column: $table.ratingUpdated,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<DateTime> get openingStatusUpdated => $composableBuilder(
+    column: $table.openingStatusUpdated,
+    builder: (column) => ColumnFilters(column),
+  );
+}
+
+class $$CachedPlacesTableOrderingComposer
+    extends Composer<_$AppDatabase, $CachedPlacesTable> {
+  $$CachedPlacesTableOrderingComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnOrderings<String> get googlePlaceId => $composableBuilder(
+    column: $table.googlePlaceId,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get provider => $composableBuilder(
+    column: $table.provider,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get name => $composableBuilder(
+    column: $table.name,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<double> get latitude => $composableBuilder(
+    column: $table.latitude,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<double> get longitude => $composableBuilder(
+    column: $table.longitude,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get address => $composableBuilder(
+    column: $table.address,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get phoneNumber => $composableBuilder(
+    column: $table.phoneNumber,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get website => $composableBuilder(
+    column: $table.website,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<double> get rating => $composableBuilder(
+    column: $table.rating,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<int> get reviewCount => $composableBuilder(
+    column: $table.reviewCount,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<bool> get isOpen => $composableBuilder(
+    column: $table.isOpen,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get category => $composableBuilder(
+    column: $table.category,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get subcategory => $composableBuilder(
+    column: $table.subcategory,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get openingHours => $composableBuilder(
+    column: $table.openingHours,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get photos => $composableBuilder(
+    column: $table.photos,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get description => $composableBuilder(
+    column: $table.description,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<DateTime> get lastUpdated => $composableBuilder(
+    column: $table.lastUpdated,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<DateTime> get detailsUpdated => $composableBuilder(
+    column: $table.detailsUpdated,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<DateTime> get ratingUpdated => $composableBuilder(
+    column: $table.ratingUpdated,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<DateTime> get openingStatusUpdated => $composableBuilder(
+    column: $table.openingStatusUpdated,
+    builder: (column) => ColumnOrderings(column),
+  );
+}
+
+class $$CachedPlacesTableAnnotationComposer
+    extends Composer<_$AppDatabase, $CachedPlacesTable> {
+  $$CachedPlacesTableAnnotationComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  GeneratedColumn<String> get googlePlaceId => $composableBuilder(
+    column: $table.googlePlaceId,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<String> get provider =>
+      $composableBuilder(column: $table.provider, builder: (column) => column);
+
+  GeneratedColumn<String> get name =>
+      $composableBuilder(column: $table.name, builder: (column) => column);
+
+  GeneratedColumn<double> get latitude =>
+      $composableBuilder(column: $table.latitude, builder: (column) => column);
+
+  GeneratedColumn<double> get longitude =>
+      $composableBuilder(column: $table.longitude, builder: (column) => column);
+
+  GeneratedColumn<String> get address =>
+      $composableBuilder(column: $table.address, builder: (column) => column);
+
+  GeneratedColumn<String> get phoneNumber => $composableBuilder(
+    column: $table.phoneNumber,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<String> get website =>
+      $composableBuilder(column: $table.website, builder: (column) => column);
+
+  GeneratedColumn<double> get rating =>
+      $composableBuilder(column: $table.rating, builder: (column) => column);
+
+  GeneratedColumn<int> get reviewCount => $composableBuilder(
+    column: $table.reviewCount,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<bool> get isOpen =>
+      $composableBuilder(column: $table.isOpen, builder: (column) => column);
+
+  GeneratedColumn<String> get category =>
+      $composableBuilder(column: $table.category, builder: (column) => column);
+
+  GeneratedColumn<String> get subcategory => $composableBuilder(
+    column: $table.subcategory,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<String> get openingHours => $composableBuilder(
+    column: $table.openingHours,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<String> get photos =>
+      $composableBuilder(column: $table.photos, builder: (column) => column);
+
+  GeneratedColumn<String> get description => $composableBuilder(
+    column: $table.description,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<DateTime> get lastUpdated => $composableBuilder(
+    column: $table.lastUpdated,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<DateTime> get detailsUpdated => $composableBuilder(
+    column: $table.detailsUpdated,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<DateTime> get ratingUpdated => $composableBuilder(
+    column: $table.ratingUpdated,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<DateTime> get openingStatusUpdated => $composableBuilder(
+    column: $table.openingStatusUpdated,
+    builder: (column) => column,
+  );
+}
+
+class $$CachedPlacesTableTableManager
+    extends
+        RootTableManager<
+          _$AppDatabase,
+          $CachedPlacesTable,
+          CachedPlace,
+          $$CachedPlacesTableFilterComposer,
+          $$CachedPlacesTableOrderingComposer,
+          $$CachedPlacesTableAnnotationComposer,
+          $$CachedPlacesTableCreateCompanionBuilder,
+          $$CachedPlacesTableUpdateCompanionBuilder,
+          (
+            CachedPlace,
+            BaseReferences<_$AppDatabase, $CachedPlacesTable, CachedPlace>,
+          ),
+          CachedPlace,
+          PrefetchHooks Function()
+        > {
+  $$CachedPlacesTableTableManager(_$AppDatabase db, $CachedPlacesTable table)
+    : super(
+        TableManagerState(
+          db: db,
+          table: table,
+          createFilteringComposer: () =>
+              $$CachedPlacesTableFilterComposer($db: db, $table: table),
+          createOrderingComposer: () =>
+              $$CachedPlacesTableOrderingComposer($db: db, $table: table),
+          createComputedFieldComposer: () =>
+              $$CachedPlacesTableAnnotationComposer($db: db, $table: table),
+          updateCompanionCallback:
+              ({
+                Value<String> googlePlaceId = const Value.absent(),
+                Value<String> provider = const Value.absent(),
+                Value<String> name = const Value.absent(),
+                Value<double> latitude = const Value.absent(),
+                Value<double> longitude = const Value.absent(),
+                Value<String?> address = const Value.absent(),
+                Value<String?> phoneNumber = const Value.absent(),
+                Value<String?> website = const Value.absent(),
+                Value<double?> rating = const Value.absent(),
+                Value<int?> reviewCount = const Value.absent(),
+                Value<bool?> isOpen = const Value.absent(),
+                Value<String?> category = const Value.absent(),
+                Value<String?> subcategory = const Value.absent(),
+                Value<String?> openingHours = const Value.absent(),
+                Value<String?> photos = const Value.absent(),
+                Value<String?> description = const Value.absent(),
+                Value<DateTime> lastUpdated = const Value.absent(),
+                Value<DateTime?> detailsUpdated = const Value.absent(),
+                Value<DateTime?> ratingUpdated = const Value.absent(),
+                Value<DateTime?> openingStatusUpdated = const Value.absent(),
+                Value<int> rowid = const Value.absent(),
+              }) => CachedPlacesCompanion(
+                googlePlaceId: googlePlaceId,
+                provider: provider,
+                name: name,
+                latitude: latitude,
+                longitude: longitude,
+                address: address,
+                phoneNumber: phoneNumber,
+                website: website,
+                rating: rating,
+                reviewCount: reviewCount,
+                isOpen: isOpen,
+                category: category,
+                subcategory: subcategory,
+                openingHours: openingHours,
+                photos: photos,
+                description: description,
+                lastUpdated: lastUpdated,
+                detailsUpdated: detailsUpdated,
+                ratingUpdated: ratingUpdated,
+                openingStatusUpdated: openingStatusUpdated,
+                rowid: rowid,
+              ),
+          createCompanionCallback:
+              ({
+                required String googlePlaceId,
+                required String provider,
+                required String name,
+                required double latitude,
+                required double longitude,
+                Value<String?> address = const Value.absent(),
+                Value<String?> phoneNumber = const Value.absent(),
+                Value<String?> website = const Value.absent(),
+                Value<double?> rating = const Value.absent(),
+                Value<int?> reviewCount = const Value.absent(),
+                Value<bool?> isOpen = const Value.absent(),
+                Value<String?> category = const Value.absent(),
+                Value<String?> subcategory = const Value.absent(),
+                Value<String?> openingHours = const Value.absent(),
+                Value<String?> photos = const Value.absent(),
+                Value<String?> description = const Value.absent(),
+                required DateTime lastUpdated,
+                Value<DateTime?> detailsUpdated = const Value.absent(),
+                Value<DateTime?> ratingUpdated = const Value.absent(),
+                Value<DateTime?> openingStatusUpdated = const Value.absent(),
+                Value<int> rowid = const Value.absent(),
+              }) => CachedPlacesCompanion.insert(
+                googlePlaceId: googlePlaceId,
+                provider: provider,
+                name: name,
+                latitude: latitude,
+                longitude: longitude,
+                address: address,
+                phoneNumber: phoneNumber,
+                website: website,
+                rating: rating,
+                reviewCount: reviewCount,
+                isOpen: isOpen,
+                category: category,
+                subcategory: subcategory,
+                openingHours: openingHours,
+                photos: photos,
+                description: description,
+                lastUpdated: lastUpdated,
+                detailsUpdated: detailsUpdated,
+                ratingUpdated: ratingUpdated,
+                openingStatusUpdated: openingStatusUpdated,
+                rowid: rowid,
+              ),
+          withReferenceMapper: (p0) => p0
+              .map(
+                (e) => (
+                  e.readTable<$CachedPlacesTable, CachedPlace>(table),
+                  BaseReferences<
+                    _$AppDatabase,
+                    $CachedPlacesTable,
+                    CachedPlace
+                  >(db, table, e),
+                ),
+              )
+              .toList(),
+          prefetchHooksCallback: null,
+        ),
+      );
+}
+
+typedef $$CachedPlacesTableProcessedTableManager =
+    ProcessedTableManager<
+      _$AppDatabase,
+      $CachedPlacesTable,
+      CachedPlace,
+      $$CachedPlacesTableFilterComposer,
+      $$CachedPlacesTableOrderingComposer,
+      $$CachedPlacesTableAnnotationComposer,
+      $$CachedPlacesTableCreateCompanionBuilder,
+      $$CachedPlacesTableUpdateCompanionBuilder,
+      (
+        CachedPlace,
+        BaseReferences<_$AppDatabase, $CachedPlacesTable, CachedPlace>,
+      ),
+      CachedPlace,
+      PrefetchHooks Function()
+    >;
 
 class $AppDatabaseManager {
   final _$AppDatabase _db;
@@ -2802,4 +4485,6 @@ class $AppDatabaseManager {
       $$CategoryPreferencesTableTableManager(_db, _db.categoryPreferences);
   $$AppSettingsTableTableManager get appSettings =>
       $$AppSettingsTableTableManager(_db, _db.appSettings);
+  $$CachedPlacesTableTableManager get cachedPlaces =>
+      $$CachedPlacesTableTableManager(_db, _db.cachedPlaces);
 }

@@ -332,6 +332,20 @@ abstract final class CategoryCatalog {
     ),
   ];
 
+  /// Compact row on Home — specific shortcuts, not broad categories.
+  static const homeQuickActionIds = [
+    'hospital',
+    'pharmacy',
+    'restaurant',
+    'atm',
+    'cafe',
+  ];
+
+  static List<QuickAction> get homeQuickActions => [
+    for (final id in homeQuickActionIds)
+      quickActions.firstWhere((action) => action.id == id),
+  ];
+
   static const List<QuickAction> quickActions = [
     QuickAction(
       id: 'hospital',
@@ -351,7 +365,7 @@ abstract final class CategoryCatalog {
     ),
     QuickAction(
       id: 'restaurant',
-      label: 'Food',
+      label: 'Restaurant',
       icon: 'restaurant',
       placeCategory: PlaceCategory.restaurant,
       categoryId: 'food',

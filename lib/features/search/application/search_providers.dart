@@ -39,5 +39,5 @@ final searchResultsProvider = FutureProvider<List<Place>>((ref) async {
           openNow: filters.openNow ? true : null,
         ),
       );
-  return page.places;
+  return ref.read(placeCacheServiceProvider).enrichPlaces(page.places);
 });

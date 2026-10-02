@@ -1,7 +1,11 @@
+import 'package:drift/native.dart';
 import 'package:find_nearby/core/di/providers.dart';
 import 'package:find_nearby/data/datasources/geolocator_location_service.dart';
+import 'package:find_nearby/data/database/app_database.dart';
+import 'package:find_nearby/data/repositories/mock_place_repository.dart';
 import 'package:find_nearby/domain/entities/place.dart';
 import 'package:find_nearby/features/location/application/location_controller.dart';
+import 'package:find_nearby/features/places/application/place_cache_service.dart';
 import 'package:find_nearby/features/places/presentation/place_details_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -16,6 +20,16 @@ void main() {
     await tester.pumpWidget(
       ProviderScope(
         overrides: [
+          appDatabaseProvider.overrideWith(
+            (ref) => AppDatabase(NativeDatabase.memory()),
+          ),
+          placeRepositoryProvider.overrideWithValue(MockPlaceRepository()),
+          placeCacheServiceProvider.overrideWith(
+            (ref) => PlaceCacheService(
+              cache: ref.watch(placeCacheRepositoryProvider),
+              places: MockPlaceRepository(),
+            ),
+          ),
           favoritesRepositoryProvider.overrideWithValue(
             FakeFavoritesRepository(),
           ),
@@ -26,8 +40,7 @@ void main() {
         child: MaterialApp(home: PlaceDetailsScreen(placeId: id)),
       ),
     );
-    await tester.pump();
-    await tester.pump(const Duration(milliseconds: 200));
+    await tester.pumpAndSettle();
 
     expect(find.text('Emirates Specialty Hospital'), findsOneWidget);
     expect(find.text('Call'), findsOneWidget);

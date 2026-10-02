@@ -2,6 +2,7 @@ import 'package:find_nearby/core/constants/category_catalog.dart';
 import 'package:find_nearby/domain/entities/app_category.dart';
 import 'package:find_nearby/domain/entities/place.dart';
 import 'package:find_nearby/domain/entities/place_search_mode.dart';
+import 'package:find_nearby/domain/entities/user_location.dart';
 import 'package:find_nearby/domain/repositories/category_repository.dart';
 import 'package:find_nearby/domain/repositories/favorites_repository.dart';
 import 'package:find_nearby/domain/repositories/search_history_repository.dart';
@@ -19,6 +20,7 @@ final class FakeSettingsRepository implements SettingsRepository {
   double radiusMeters;
   bool notifications = false;
   PlaceSearchMode placeSearchMode;
+  UserLocation? manualLocation;
 
   @override
   Stream<ThemeMode> watchThemeMode() => Stream.value(themeMode);
@@ -53,6 +55,19 @@ final class FakeSettingsRepository implements SettingsRepository {
   @override
   Future<void> setPlaceSearchMode(PlaceSearchMode mode) async =>
       placeSearchMode = mode;
+
+  @override
+  Future<UserLocation?> getManualLocation() async => manualLocation;
+
+  @override
+  Future<void> setManualLocation(UserLocation location) async {
+    manualLocation = location;
+  }
+
+  @override
+  Future<void> clearManualLocation() async {
+    manualLocation = null;
+  }
 }
 
 final class FakeFavoritesRepository implements FavoritesRepository {

@@ -9,12 +9,13 @@ class RatingWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final scheme = Theme.of(context).colorScheme;
+    final muted = scheme.onSurface.withValues(alpha: 0.72);
+
     if (rating == null || rating! <= 0) {
       return Text(
         'No ratings yet',
-        style: Theme.of(context).textTheme.bodySmall?.copyWith(
-          color: Theme.of(context).colorScheme.onSurfaceVariant,
-        ),
+        style: Theme.of(context).textTheme.bodySmall?.copyWith(color: muted),
       );
     }
 
@@ -34,17 +35,16 @@ class RatingWidget extends StatelessWidget {
         const SizedBox(width: 4),
         Text(
           rating!.toStringAsFixed(1),
-          style: Theme.of(
-            context,
-          ).textTheme.labelLarge?.copyWith(fontWeight: FontWeight.w700),
+          style: Theme.of(context).textTheme.labelLarge?.copyWith(
+            fontWeight: FontWeight.w700,
+            color: scheme.onSurface,
+          ),
         ),
         if (countLabel != null) ...[
           const SizedBox(width: 4),
           Text(
             '($countLabel)',
-            style: Theme.of(context).textTheme.bodySmall?.copyWith(
-              color: Theme.of(context).colorScheme.onSurfaceVariant,
-            ),
+            style: Theme.of(context).textTheme.bodySmall?.copyWith(color: muted),
           ),
         ],
       ],

@@ -28,7 +28,7 @@ class PlaceDetailsScreen extends ConsumerWidget {
     final favoriteIds = ref.watch(favoriteIdsProvider);
 
     return details.when(
-      loading: () => const Scaffold(body: Center(child: PlaceCardSkeleton())),
+      loading: () => const PlaceDetailsSkeleton(),
       error: (error, _) => Scaffold(
         appBar: AppBar(),
         body: ErrorState.fromError(
@@ -110,10 +110,10 @@ class _DetailsBody extends ConsumerWidget {
                     style: Theme.of(context).textTheme.bodySmall,
                   ),
                 ],
-                if (place.hasPhone) ...[
-                  const SizedBox(height: 16),
-                  _InfoRow(icon: Icons.call_outlined, text: place.phoneNumber!),
-                ],
+                // if (place.hasPhone) ...[
+                //   const SizedBox(height: 16),
+                //   _InfoRow(icon: Icons.call_outlined, text: place.phoneNumber!),
+                // ],
                 if (place.hasWebsite) ...[
                   const SizedBox(height: 8),
                   _InfoRow(icon: Icons.public_outlined, text: place.website!),

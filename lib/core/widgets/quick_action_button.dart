@@ -16,36 +16,25 @@ class QuickActionButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
-      width: 76,
+    return Material(
+      color: AppColors.tintMint,
+      borderRadius: BorderRadius.circular(20),
       child: InkWell(
-        borderRadius: BorderRadius.circular(16),
         onTap: onTap,
+        borderRadius: BorderRadius.circular(20),
         child: Padding(
-          padding: const EdgeInsets.symmetric(vertical: 8),
-          child: Column(
+          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
             children: [
-              Container(
-                width: 54,
-                height: 54,
-                decoration: BoxDecoration(
-                  color: AppColors.tintMint,
-                  borderRadius: BorderRadius.circular(18),
-                  border: Border.all(
-                    color: AppColors.teal.withValues(alpha: 0.25),
-                  ),
-                ),
-                child: Icon(
-                  iconFromName(action.icon),
-                  color: AppColors.tealDark,
-                ),
+              Icon(
+                iconFromName(action.icon),
+                size: 16,
+                color: AppColors.tealDark,
               ),
-              const SizedBox(height: 8),
+              const SizedBox(width: 6),
               Text(
                 action.label,
-                maxLines: 1,
-                overflow: TextOverflow.ellipsis,
-                textAlign: TextAlign.center,
                 style: Theme.of(context).textTheme.labelMedium?.copyWith(
                   fontWeight: FontWeight.w600,
                   color: AppColors.ink,

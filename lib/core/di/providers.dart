@@ -3,8 +3,10 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../data/database/app_database.dart';
 import '../../data/repositories/drift_category_repository.dart';
 import '../../data/repositories/drift_favorites_repository.dart';
+import '../../data/repositories/drift_place_cache_repository.dart';
 import '../../data/repositories/drift_search_history_repository.dart';
 import '../../data/repositories/drift_settings_repository.dart';
+import '../../features/places/application/place_cache_service.dart';
 import '../../data/repositories/geoapify_place_repository.dart';
 import '../../data/repositories/google_places_repository.dart';
 import '../../data/repositories/hybrid_place_repository.dart';
@@ -42,6 +44,17 @@ final searchHistoryRepositoryProvider = Provider<SearchHistoryRepository>((
   ref,
 ) {
   return DriftSearchHistoryRepository(ref.watch(appDatabaseProvider));
+});
+
+final placeCacheRepositoryProvider = Provider<DriftPlaceCacheRepository>((ref) {
+  return DriftPlaceCacheRepository(ref.watch(appDatabaseProvider));
+});
+
+final placeCacheServiceProvider = Provider<PlaceCacheService>((ref) {
+  return PlaceCacheService(
+    cache: ref.watch(placeCacheRepositoryProvider),
+    places: ref.watch(placeRepositoryProvider),
+  );
 });
 
 final googlePlacesRepositoryProvider = Provider<PlaceRepository>((ref) {

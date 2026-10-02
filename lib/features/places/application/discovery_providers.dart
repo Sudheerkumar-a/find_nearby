@@ -59,7 +59,6 @@ final nearbyPlacesProvider = FutureProvider<List<Place>>((ref) async {
   final placeCategory = subcategory?.placeCategory;
   final categoryGroup = placeCategory == null ? category?.group : null;
 
-  // Text only for custom categories / explicit searchQuery — never provider strings.
   final textQuery =
       subcategory?.searchQuery ??
       category?.customQuery ??
@@ -77,11 +76,12 @@ final nearbyPlacesProvider = FutureProvider<List<Place>>((ref) async {
     ),
   );
 
-  return PlaceFilterEngine.apply(
+  final filtered = PlaceFilterEngine.apply(
     places: page.places,
     filters: filters,
     origin: origin,
   );
+  return ref.read(placeCacheServiceProvider).enrichPlaces(filtered);
 });
 
 final bestRatedNearbyProvider = Provider<List<Place>>((ref) {

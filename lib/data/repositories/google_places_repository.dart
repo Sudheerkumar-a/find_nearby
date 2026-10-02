@@ -1,6 +1,7 @@
 import 'package:dio/dio.dart';
 
 import '../../core/config/app_config.dart';
+import '../../core/constants/app_constants.dart';
 import '../../core/errors/app_exception.dart';
 import '../../core/network/dio_client.dart';
 import '../../domain/entities/place.dart';
@@ -55,7 +56,7 @@ final class GooglePlacesRepository implements PlaceRepository {
       final response = await _dio.post<Map<String, dynamic>>(
         '/v1/places:searchNearby',
         data: {
-          'maxResultCount': 20,
+          'maxResultCount': AppConstants.nearbyPageSize,
           'rankPreference': 'DISTANCE',
           if (includedType != null) 'includedTypes': [includedType],
           if (query.openNow == true) 'openNow': true,
@@ -100,7 +101,7 @@ final class GooglePlacesRepository implements PlaceRepository {
         '/v1/places:searchText',
         data: {
           'textQuery': query.query,
-          'pageSize': 20,
+          'pageSize': AppConstants.nearbyPageSize,
           if (query.openNow == true) 'openNow': true,
           'locationBias': {
             'circle': {

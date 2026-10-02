@@ -10,6 +10,7 @@ import '../../../core/utils/device_actions.dart';
 import '../../../domain/entities/place_search_mode.dart';
 import '../../filters/application/filters_controller.dart';
 import '../../location/application/location_controller.dart';
+import '../../location/presentation/location_picker_sheet.dart';
 import '../../places/application/discovery_providers.dart';
 import '../application/theme_provider.dart';
 
@@ -24,6 +25,7 @@ class SettingsScreen extends ConsumerWidget {
     final filters = ref.watch(filtersProvider);
     final placeMode =
         ref.watch(placeSearchModeProvider).value ?? PlaceSearchMode.mock;
+    final location = ref.watch(locationProvider);
 
     return Scaffold(
       appBar: AppBar(title: const Text('Settings')),
@@ -43,10 +45,16 @@ class SettingsScreen extends ConsumerWidget {
             onTap: () => _editRadius(context, ref),
           ),
           ListTile(
+            leading: const Icon(Icons.edit_location_outlined),
+            title: const Text('Change Location'),
+            subtitle: Text(location.label),
+            onTap: () => showLocationPickerSheet(context, ref),
+          ),
+          ListTile(
             leading: const Icon(Icons.my_location_outlined),
-            title: const Text('Location Settings'),
-            subtitle: const Text('Refresh or grant location access'),
-            onTap: () => ref.read(locationProvider.notifier).refresh(),
+            title: const Text('Use Current Location'),
+            subtitle: const Text('Switch back to GPS'),
+            onTap: () => ref.read(locationProvider.notifier).useDeviceLocation(),
           ),
           const Divider(),
           Padding(

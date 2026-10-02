@@ -2,13 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
-import '../../../core/constants/app_constants.dart';
 import '../../../core/constants/category_catalog.dart';
 import '../../../core/extensions/context_ext.dart';
 import '../../../core/router/app_router.dart';
 import '../../../core/theme/app_colors.dart';
 import '../../../core/utils/device_actions.dart';
-import '../../../core/utils/greeting.dart';
 import '../../../core/widgets/app_search_bar.dart';
 import '../../../core/widgets/category_chip.dart';
 import '../../../core/widgets/empty_state.dart';
@@ -26,10 +24,13 @@ import '../../favorites/application/favorites_providers.dart';
 import '../../filters/application/filters_controller.dart';
 import '../../filters/presentation/filter_bottom_sheet.dart';
 import '../../location/application/location_controller.dart';
+import '../../location/presentation/location_picker_sheet.dart';
 import '../../places/application/discovery_providers.dart';
 
 class HomeScreen extends ConsumerWidget {
   const HomeScreen({super.key});
+
+  static const _sectionPad = EdgeInsets.fromLTRB(20, 12, 20, 6);
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -38,8 +39,8 @@ class HomeScreen extends ConsumerWidget {
     final categories = ref.watch(enabledCategoriesProvider);
     final selectedCategory = ref.watch(selectedCategoryProvider);
     final nearby = ref.watch(nearbyPlacesProvider);
-    final bestRated = ref.watch(bestRatedNearbyProvider);
     final favoriteIds = ref.watch(favoriteIdsProvider);
+    final quickActions = CategoryCatalog.homeQuickActions;
 
     return Scaffold(
       backgroundColor: AppColors.scaffold,
@@ -56,27 +57,13 @@ class HomeScreen extends ConsumerWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(
-                      greetingFor(DateTime.now()),
-                      style: Theme.of(context).textTheme.headlineSmall
-                          ?.copyWith(
-                            fontWeight: FontWeight.w800,
-                            color: AppColors.onTeal,
-                          ),
-                    ),
-                    const SizedBox(height: 4),
-                    Text(
-                      AppConstants.tagline,
-                      style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                        color: AppColors.onTeal.withValues(alpha: 0.9),
-                      ),
-                    ),
-                    const SizedBox(height: 14),
                     LocationHeader(
                       location: location,
                       onTeal: true,
                       onRefresh: () =>
                           ref.read(locationProvider.notifier).refresh(),
+                      onChangeLocation: () =>
+                          showLocationPickerSheet(context, ref),
                       onOpenSettings: () =>
                           ref.read(locationProvider.notifier).openSettings(),
                     ),
@@ -105,41 +92,95 @@ class HomeScreen extends ConsumerWidget {
                 ),
               ),
             ),
-            const SliverToBoxAdapter(child: SectionHeader(title: 'Popular')),
+            SliverToBoxAdapter(
+              child: SectionHeader(
+                title: 'Categories',
+                padding: _sectionPad,
+                trailing: TextButton(
+                  onPressed: () => context.go(AppRoutes.explore),
+                  style: TextButton.styleFrom(
+                    foregroundColor: AppColors.tealDark,
+                    padding: const EdgeInsets.symmetric(horizontal: 8),
+                    minimumSize: Size.zero,
+                    tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                  ),
+                  child: const Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Text('See all'),
+                      Icon(Icons.chevron_right_rounded, size: 20),
+                    ],
+                  ),
+                ),
+              ),
+            ),
             SliverToBoxAdapter(
               child: SizedBox(
-                height: 48,
-                child: ListView.separated(
-                  scrollDirection: Axis.horizontal,
-                  padding: const EdgeInsets.symmetric(horizontal: 20),
-                  itemCount: categories.length,
-                  separatorBuilder: (context, index) =>
-                      const SizedBox(width: 8),
-                  itemBuilder: (context, index) {
-                    final category = categories[index];
-                    return CategoryChip(
-                      category: category,
-                      selected: filters.categoryId == category.id,
-                      onTap: () {
-                        final selected = filters.categoryId == category.id;
-                        ref
-                            .read(filtersProvider.notifier)
-                            .setCategory(
-                              categoryId: selected ? null : category.id,
-                            );
+                height: 38,
+                child: Stack(
+                  children: [
+                    ListView.separated(
+                      scrollDirection: Axis.horizontal,
+                      padding: const EdgeInsets.fromLTRB(20, 0, 52, 0),
+                      itemCount: categories.length,
+                      separatorBuilder: (context, index) =>
+                          const SizedBox(width: 8),
+                      itemBuilder: (context, index) {
+                        final category = categories[index];
+                        return CategoryChip(
+                          compact: true,
+                          category: category,
+                          selected: filters.categoryId == category.id,
+                          onTap: () {
+                            final selected = filters.categoryId == category.id;
+                            ref
+                                .read(filtersProvider.notifier)
+                                .setCategory(
+                                  categoryId: selected ? null : category.id,
+                                );
+                          },
+                        );
                       },
-                    );
-                  },
+                    ),
+                    Positioned(
+                      right: 0,
+                      top: 0,
+                      bottom: 0,
+                      child: DecoratedBox(
+                        decoration: BoxDecoration(
+                          gradient: LinearGradient(
+                            begin: Alignment.centerLeft,
+                            end: Alignment.centerRight,
+                            colors: [
+                              AppColors.scaffold.withValues(alpha: 0),
+                              AppColors.scaffold,
+                            ],
+                          ),
+                        ),
+                        child: IconButton(
+                          tooltip: 'See all categories',
+                          onPressed: () => context.go(AppRoutes.explore),
+                          icon: const Icon(
+                            Icons.chevron_right_rounded,
+                            color: AppColors.inkMuted,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
               ),
             ),
             if (selectedCategory != null) ...[
               const SliverToBoxAdapter(
-                child: SectionHeader(title: 'Subcategories'),
+                child: SectionHeader(
+                  title: 'Subcategories',
+                  padding: EdgeInsets.fromLTRB(20, 8, 20, 4),
+                ),
               ),
               SliverToBoxAdapter(
                 child: SizedBox(
-                  height: 48,
+                  height: 36,
                   child: ListView.separated(
                     scrollDirection: Axis.horizontal,
                     padding: const EdgeInsets.symmetric(horizontal: 20),
@@ -149,6 +190,7 @@ class HomeScreen extends ConsumerWidget {
                     itemBuilder: (context, index) {
                       final sub = selectedCategory.subcategories[index];
                       return SubcategoryChip(
+                        compact: true,
                         subcategory: sub,
                         selected: filters.subcategoryId == sub.id,
                         onTap: () {
@@ -167,19 +209,22 @@ class HomeScreen extends ConsumerWidget {
               ),
             ],
             const SliverToBoxAdapter(
-              child: SectionHeader(title: 'Quick actions'),
+              child: SectionHeader(
+                title: 'Quick',
+                padding: EdgeInsets.fromLTRB(20, 10, 20, 6),
+              ),
             ),
             SliverToBoxAdapter(
               child: SizedBox(
-                height: 96,
+                height: 38,
                 child: ListView.separated(
                   scrollDirection: Axis.horizontal,
-                  padding: const EdgeInsets.symmetric(horizontal: 12),
-                  itemCount: CategoryCatalog.quickActions.length,
+                  padding: const EdgeInsets.symmetric(horizontal: 20),
+                  itemCount: quickActions.length,
                   separatorBuilder: (context, index) =>
-                      const SizedBox(width: 4),
+                      const SizedBox(width: 8),
                   itemBuilder: (context, index) {
-                    final action = CategoryCatalog.quickActions[index];
+                    final action = quickActions[index];
                     return QuickActionButton(
                       action: action,
                       onTap: () {
@@ -195,41 +240,9 @@ class HomeScreen extends ConsumerWidget {
                 ),
               ),
             ),
-            if (bestRated.isNotEmpty && filters.categoryId == null) ...[
-              const SliverToBoxAdapter(
-                child: SectionHeader(title: 'Best rated nearby'),
-              ),
-              SliverToBoxAdapter(
-                child: SizedBox(
-                  height: 86,
-                  child: ListView.separated(
-                    scrollDirection: Axis.horizontal,
-                    padding: const EdgeInsets.symmetric(horizontal: 20),
-                    itemCount: bestRated.length,
-                    separatorBuilder: (context, index) =>
-                        const SizedBox(width: 10),
-                    itemBuilder: (context, index) {
-                      final place = bestRated[index];
-                      return ActionChip(
-                        backgroundColor: AppColors.tintPeach,
-                        label: Text(
-                          '${place.name}  ${place.rating?.toStringAsFixed(1) ?? ''}',
-                          style: const TextStyle(
-                            color: AppColors.coralStrong,
-                            fontWeight: FontWeight.w600,
-                          ),
-                        ),
-                        onPressed: () =>
-                            context.push(AppRoutes.place(place.id)),
-                      );
-                    },
-                  ),
-                ),
-              ),
-            ],
             SliverToBoxAdapter(
               child: Padding(
-                padding: const EdgeInsets.fromLTRB(20, 12, 8, 10),
+                padding: const EdgeInsets.fromLTRB(20, 10, 8, 6),
                 child: Row(
                   children: [
                     Text(
@@ -268,7 +281,7 @@ class HomeScreen extends ConsumerWidget {
                     sliver: SliverList.separated(
                       itemCount: places.length,
                       separatorBuilder: (context, index) =>
-                          const SizedBox(height: 14),
+                          const SizedBox(height: 10),
                       itemBuilder: (context, index) {
                         return _HomePlaceCard(
                           place: places[index],
@@ -285,7 +298,7 @@ class HomeScreen extends ConsumerWidget {
                   sliver: SliverList.separated(
                     itemCount: 3,
                     separatorBuilder: (context, index) =>
-                        const SizedBox(height: 14),
+                        const SizedBox(height: 10),
                     itemBuilder: (context, index) => const PlaceCardSkeleton(),
                   ),
                 ),

@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 
 import '../../core/config/app_config.dart';
 import '../../core/constants/app_constants.dart';
+import '../../domain/entities/place.dart';
 import '../../domain/entities/place_search_mode.dart';
+import '../../domain/entities/user_location.dart';
 import '../../domain/repositories/settings_repository.dart';
 import '../database/app_database.dart';
 
@@ -65,6 +67,47 @@ final class DriftSettingsRepository implements SettingsRepository {
   @override
   Future<void> setPlaceSearchMode(PlaceSearchMode mode) {
     return _write(SettingKeys.placeSearchMode, mode.name);
+  }
+
+  @override
+  Future<UserLocation?> getManualLocation() async {
+    final lat = double.tryParse(
+      await _read(SettingKeys.manualLocationLat) ?? '',
+    );
+    final lng = double.tryParse(
+      await _read(SettingKeys.manualLocationLng) ?? '',
+    );
+    final label = await _read(SettingKeys.manualLocationLabel);
+    if (lat == null || lng == null || label == null || label.isEmpty) {
+      return null;
+    }
+
+    return UserLocation(
+      status: LocationStatus.ready,
+      point: GeoPoint(lat, lng),
+      label: label,
+      source: LocationSource.manual,
+    );
+  }
+
+  @override
+  Future<void> setManualLocation(UserLocation location) {
+    final point = location.point;
+    if (point == null) return Future.value();
+    return Future.wait([
+      _write(SettingKeys.manualLocationLat, point.latitude.toString()),
+      _write(SettingKeys.manualLocationLng, point.longitude.toString()),
+      _write(SettingKeys.manualLocationLabel, location.label),
+    ]);
+  }
+
+  @override
+  Future<void> clearManualLocation() {
+    return Future.wait([
+      _write(SettingKeys.manualLocationLat, ''),
+      _write(SettingKeys.manualLocationLng, ''),
+      _write(SettingKeys.manualLocationLabel, ''),
+    ]);
   }
 
   Stream<String?> _watch(String key) {

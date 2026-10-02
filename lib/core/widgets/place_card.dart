@@ -2,10 +2,9 @@ import 'package:flutter/material.dart';
 
 import '../../domain/entities/place.dart';
 import '../theme/app_colors.dart';
+import '../utils/icon_map.dart';
 import 'distance_widget.dart';
-import 'favorite_button.dart';
 import 'opening_status.dart';
-import 'place_action_button.dart';
 import 'place_image.dart';
 import 'rating_widget.dart';
 
@@ -29,110 +28,225 @@ class PlaceCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final scheme = Theme.of(context).colorScheme;
+    final text = Theme.of(context).textTheme;
+    final category = place.categoryLabel;
+    final muted = scheme.onSurface.withValues(alpha: 0.72);
+
     return Material(
-      color: AppColors.card,
-      elevation: 2,
-      shadowColor: Colors.black.withValues(alpha: 0.08),
-      borderRadius: BorderRadius.circular(20),
+      color: scheme.surfaceContainerLow,
+      elevation: 1,
+      shadowColor: Colors.black.withValues(alpha: 0.06),
+      borderRadius: BorderRadius.circular(16),
       clipBehavior: Clip.antiAlias,
       child: InkWell(
         onTap: onOpen,
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Stack(
-              children: [
-                PlaceImage(place: place),
-                Positioned(
-                  top: 8,
-                  right: 8,
-                  child: FavoriteButton(
-                    isFavorite: isFavorite,
-                    onPressed: onFavorite,
-                  ),
-                ),
-                if (place.isOpen != null)
-                  Positioned(
-                    top: 10,
-                    left: 10,
-                    child: Container(
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 10,
-                        vertical: 4,
-                      ),
-                      decoration: BoxDecoration(
-                        color: place.isOpen!
-                            ? AppColors.success
-                            : AppColors.coral,
-                        borderRadius: BorderRadius.circular(8),
-                      ),
-                      child: Text(
-                        place.isOpen! ? 'Open' : 'Closed',
-                        style: Theme.of(context).textTheme.labelSmall?.copyWith(
-                          color: Colors.white,
-                          fontWeight: FontWeight.w700,
-                        ),
-                      ),
-                    ),
-                  ),
-              ],
-            ),
-            Padding(
-              padding: const EdgeInsets.fromLTRB(16, 14, 16, 16),
-              child: Column(
+        child: Padding(
+          padding: const EdgeInsets.fromLTRB(12, 12, 8, 12),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Row(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(
-                    place.name,
-                    maxLines: 2,
-                    overflow: TextOverflow.ellipsis,
-                    style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                      fontWeight: FontWeight.w800,
-                      color: AppColors.tealDark,
+                  ClipRRect(
+                    borderRadius: BorderRadius.circular(12),
+                    child: SizedBox(
+                      width: 72,
+                      height: 72,
+                      child: PlaceImage(place: place, height: 72),
                     ),
                   ),
-                  if (place.categoryLabel.isNotEmpty) ...[
-                    const SizedBox(height: 4),
-                    Text(
-                      place.categoryLabel,
-                      style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                        color: AppColors.inkMuted,
-                      ),
+                  const SizedBox(width: 12),
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Row(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Expanded(
+                              child: Text(
+                                place.name,
+                                maxLines: 2,
+                                overflow: TextOverflow.ellipsis,
+                                style: text.titleMedium?.copyWith(
+                                  fontWeight: FontWeight.w800,
+                                  color: scheme.onSurface,
+                                  height: 1.2,
+                                ),
+                              ),
+                            ),
+                            IconButton(
+                              tooltip: isFavorite
+                                  ? 'Remove from favorites'
+                                  : 'Add to favorites',
+                              onPressed: onFavorite,
+                              visualDensity: VisualDensity.compact,
+                              padding: EdgeInsets.zero,
+                              constraints: const BoxConstraints(
+                                minWidth: 24,
+                                minHeight: 24,
+                              ),
+                              icon: Icon(
+                                isFavorite
+                                    ? Icons.favorite_rounded
+                                    : Icons.favorite_border_rounded,
+                                size: 22,
+                                color: isFavorite
+                                    ? AppColors.coral
+                                    : scheme.onSurface,
+                              ),
+                            ),
+                          ],
+                        ),
+                        const SizedBox(height: 4),
+                        Row(
+                          children: [
+                            RatingWidget(
+                              rating: place.rating,
+                              reviewCount: place.reviewCount,
+                            ),
+                            const Spacer(),
+                            DistanceWidget(
+                              meters: place.distanceMeters,
+                              compact: true,
+                            ),
+                          ],
+                        ),
+                        const SizedBox(height: 2),
+                        Row(
+                          children: [
+                            OpeningStatus(isOpen: place.isOpen),
+                            if (category.isNotEmpty) ...[
+                              Padding(
+                                padding: const EdgeInsets.symmetric(
+                                  horizontal: 6,
+                                ),
+                                child: Text(
+                                  '·',
+                                  style: text.bodySmall?.copyWith(color: muted),
+                                ),
+                              ),
+                              Icon(
+                                iconFromName(_categoryIcon(place)),
+                                size: 14,
+                                color: muted,
+                              ),
+                              const SizedBox(width: 4),
+                              Flexible(
+                                child: Text(
+                                  category,
+                                  maxLines: 1,
+                                  overflow: TextOverflow.ellipsis,
+                                  style: text.bodySmall?.copyWith(color: muted),
+                                ),
+                              ),
+                            ],
+                          ],
+                        ),
+                      ],
                     ),
-                  ],
-                  const SizedBox(height: 8),
-                  RatingWidget(
-                    rating: place.rating,
-                    reviewCount: place.reviewCount,
-                  ),
-                  const SizedBox(height: 6),
-                  DistanceWidget(
-                    meters: place.distanceMeters,
-                    address: place.address,
-                  ),
-                  const SizedBox(height: 6),
-                  OpeningStatus(isOpen: place.isOpen),
-                  const SizedBox(height: 14),
-                  Row(
-                    children: [
-                      PlaceActionButton(
-                        icon: Icons.call_outlined,
-                        label: 'Call',
-                        enabled: place.hasPhone,
-                        onPressed: onCall,
-                      ),
-                      const SizedBox(width: 10),
-                      PlaceActionButton(
-                        icon: Icons.near_me_outlined,
-                        label: 'Directions',
-                        onPressed: onDirections,
-                      ),
-                    ],
                   ),
                 ],
               ),
-            ),
-          ],
+              if (place.address != null && place.address!.trim().isNotEmpty) ...[
+                const SizedBox(height: 8),
+                Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Icon(Icons.place_outlined, size: 16, color: muted),
+                    const SizedBox(width: 6),
+                    Expanded(
+                      child: Text(
+                        place.address!,
+                        style: text.bodySmall?.copyWith(color: muted),
+                      ),
+                    ),
+                  ],
+                ),
+              ],
+              const SizedBox(height: 8),
+              Align(
+                alignment: Alignment.centerRight,
+                child: Wrap(
+                  spacing: 8,
+                  runSpacing: 6,
+                  alignment: WrapAlignment.end,
+                  children: [
+                    _ActionPill(
+                      tooltip: place.hasPhone
+                          ? 'Call'
+                          : 'Phone number unavailable',
+                      icon: Icons.call_outlined,
+                      label: 'Call',
+                      onPressed: place.hasPhone ? onCall : null,
+                    ),
+                    _ActionPill(
+                      tooltip: 'Directions',
+                      icon: Icons.near_me_outlined,
+                      label: 'Directions',
+                      onPressed: onDirections,
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  String _categoryIcon(Place place) {
+    final sub = place.subcategory?.toLowerCase() ?? '';
+    if (sub.contains('hospital')) return 'local_hospital';
+    if (sub.contains('pharmac')) return 'local_pharmacy';
+    if (sub.contains('cafe')) return 'local_cafe';
+    if (sub.contains('hotel')) return 'hotel';
+    if (sub.contains('atm')) return 'atm';
+    if (sub.contains('park')) return 'park';
+    if (sub.contains('cinema')) return 'movie';
+    if (place.category?.toLowerCase() == 'food') return 'restaurant';
+    if (place.category?.toLowerCase() == 'health') return 'health_and_safety';
+    return 'place';
+  }
+}
+
+class _ActionPill extends StatelessWidget {
+  const _ActionPill({
+    required this.tooltip,
+    required this.icon,
+    required this.label,
+    required this.onPressed,
+  });
+
+  final String tooltip;
+  final IconData icon;
+  final String label;
+  final VoidCallback? onPressed;
+
+  @override
+  Widget build(BuildContext context) {
+    return Tooltip(
+      message: tooltip,
+      child: FilledButton.icon(
+        onPressed: onPressed,
+        icon: Icon(icon, size: 16),
+        label: Text(label),
+        style: FilledButton.styleFrom(
+          backgroundColor: AppColors.teal,
+          foregroundColor: AppColors.onTeal,
+          disabledBackgroundColor: AppColors.teal.withValues(alpha: 0.35),
+          disabledForegroundColor: AppColors.onTeal.withValues(alpha: 0.7),
+          visualDensity: VisualDensity.compact,
+          tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+          minimumSize: const Size(0, 32),
+          padding: const EdgeInsets.symmetric(horizontal: 12),
+          textStyle: Theme.of(
+            context,
+          ).textTheme.labelMedium?.copyWith(fontWeight: FontWeight.w700),
+          shape: const StadiumBorder(),
         ),
       ),
     );

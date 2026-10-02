@@ -27,13 +27,16 @@ void main() {
     );
 
     expect(find.text('Emirates Specialty Hospital'), findsOneWidget);
+    expect(find.byIcon(Icons.call_outlined), findsOneWidget);
+    expect(find.byIcon(Icons.near_me_outlined), findsOneWidget);
+    expect(find.byIcon(Icons.favorite_border_rounded), findsOneWidget);
+    expect(find.text('Open now'), findsOneWidget);
     expect(find.text('Call'), findsOneWidget);
     expect(find.text('Directions'), findsOneWidget);
-    expect(find.text('Open now'), findsOneWidget);
 
     await tester.tap(find.text('Emirates Specialty Hospital'));
     expect(opened, isTrue);
-    await tester.tap(find.text('Call'));
+    await tester.tap(find.byTooltip('Call'));
     expect(called, isTrue);
   });
 
@@ -57,10 +60,11 @@ void main() {
       ),
     );
 
-    final call = tester.widget<OutlinedButton>(
-      find.widgetWithText(OutlinedButton, 'Call'),
+    expect(find.text('Call'), findsOneWidget);
+    final callButton = tester.widget<FilledButton>(
+      find.widgetWithText(FilledButton, 'Call'),
     );
-    expect(call.onPressed, isNull);
+    expect(callButton.onPressed, isNull);
     expect(find.text('No ratings yet'), findsOneWidget);
   });
 }
