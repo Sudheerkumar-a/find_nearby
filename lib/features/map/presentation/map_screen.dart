@@ -2,9 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../../core/errors/app_exception.dart';
 import '../../../core/extensions/context_ext.dart';
 import '../../../core/router/app_router.dart';
-import '../../../core/utils/device_actions.dart';
+import '../../../core/utils/directions_launcher.dart';
 import '../../../core/widgets/empty_state.dart';
 import '../../../core/widgets/error_state.dart';
 import '../../../core/widgets/loading_skeleton.dart';
@@ -30,12 +31,19 @@ class MapScreen extends ConsumerWidget {
           ),
         ],
       ),
-      body: nearby.when(
+      body: !location.isReady
+          ? const Center(child: PlaceCardSkeleton())
+          : nearby.when(
         loading: () => const Center(child: PlaceCardSkeleton()),
-        error: (error, _) => ErrorState.fromError(
-          error,
-          onRetry: () => ref.invalidate(nearbyPlacesProvider),
-        ),
+        error: (error, _) {
+          if (error is LocationNotReadyException) {
+            return const Center(child: PlaceCardSkeleton());
+          }
+          return ErrorState.fromError(
+            error,
+            onRetry: () => ref.invalidate(nearbyPlacesProvider),
+          );
+        },
         data: (places) {
           if (places.isEmpty) {
             return const EmptyState(
@@ -68,10 +76,12 @@ class MapScreen extends ConsumerWidget {
                       trailing: IconButton(
                         tooltip: 'Directions',
                         onPressed: () => context.runAction(
-                          () => DeviceActions.directions(
+                          () => DirectionsLauncher.show(
+                            context,
                             latitude: place.latitude,
                             longitude: place.longitude,
                             name: place.name,
+                            origin: ref.read(locationProvider).point,
                           ),
                         ),
                         icon: const Icon(Icons.near_me_outlined),

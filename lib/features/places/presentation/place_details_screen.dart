@@ -7,6 +7,8 @@ import '../../../core/di/providers.dart';
 import '../../../core/extensions/context_ext.dart';
 import '../../../core/router/app_router.dart';
 import '../../../core/utils/device_actions.dart';
+import '../../../core/utils/directions_launcher.dart';
+import '../../location/application/location_controller.dart';
 import '../../../core/widgets/error_state.dart';
 import '../../../core/widgets/favorite_button.dart';
 import '../../../core/widgets/loading_skeleton.dart';
@@ -53,6 +55,7 @@ class _DetailsBody extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final colors = Theme.of(context).colorScheme;
+    final origin = ref.read(locationProvider).point;
 
     return Scaffold(
       body: CustomScrollView(
@@ -147,10 +150,12 @@ class _DetailsBody extends ConsumerWidget {
                             {'place_id': place.id},
                           );
                           context.runAction(
-                            () => DeviceActions.directions(
+                            () => DirectionsLauncher.show(
+                              context,
                               latitude: place.latitude,
                               longitude: place.longitude,
                               name: place.name,
+                              origin: origin,
                             ),
                           );
                         },

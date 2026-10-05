@@ -44,6 +44,11 @@ final class ApiException extends AppException {
   }
 }
 
+/// Nearby search is waiting for a usable location — show loading, not empty.
+final class LocationNotReadyException implements Exception {
+  const LocationNotReadyException();
+}
+
 final class LocationUnavailableException extends AppException {
   const LocationUnavailableException({
     String message =

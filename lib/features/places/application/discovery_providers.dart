@@ -2,6 +2,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../core/constants/category_catalog.dart';
 import '../../../core/di/providers.dart';
+import '../../../core/errors/app_exception.dart';
 import '../../../domain/entities/app_category.dart';
 import '../../../domain/entities/place.dart';
 import '../../../domain/repositories/place_repository.dart';
@@ -30,8 +31,10 @@ final selectedCategoryProvider = Provider<AppCategory?>((ref) {
 
 final nearbyPlacesProvider = FutureProvider<List<Place>>((ref) async {
   final location = ref.watch(locationProvider);
-  final origin = location.point;
-  if (origin == null) return const [];
+  if (!location.isReady) {
+    throw const LocationNotReadyException();
+  }
+  final origin = location.point!;
 
   final filters = ref.watch(filtersProvider);
   final categories = ref.watch(enabledCategoriesProvider);

@@ -8,6 +8,8 @@ import '../../../core/extensions/context_ext.dart';
 import '../../../core/router/app_router.dart';
 import '../../../core/utils/debounce.dart';
 import '../../../core/utils/device_actions.dart';
+import '../../../core/utils/directions_launcher.dart';
+import '../../location/application/location_controller.dart';
 import '../../../domain/entities/place.dart';
 import '../../../core/widgets/app_search_bar.dart';
 import '../../../core/widgets/empty_state.dart';
@@ -172,10 +174,12 @@ class _SearchScreenState extends ConsumerState<SearchScreen> {
                 () => DeviceActions.dial(place.phoneNumber!),
               ),
               onDirections: () => context.runAction(
-                () => DeviceActions.directions(
+                () => DirectionsLauncher.show(
+                  context,
                   latitude: place.latitude,
                   longitude: place.longitude,
                   name: place.name,
+                  origin: ref.read(locationProvider).point,
                 ),
               ),
             );

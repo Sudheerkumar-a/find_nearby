@@ -48,12 +48,26 @@ final class Place {
   bool get hasRating => rating != null && rating! > 0;
   bool get hasPhotos => photos.isNotEmpty;
 
-  String get categoryLabel {
-    final parts = [
-      subcategory,
-      category,
-    ].whereType<String>().where((s) => s.isNotEmpty);
-    return parts.join(' · ');
+  /// Best user-facing category (subcategory when set, else group).
+  String get primaryCategory {
+    final specific = subcategory?.trim();
+    if (specific != null && specific.isNotEmpty) return _titleCase(specific);
+    final group = category?.trim();
+    if (group != null && group.isNotEmpty) return _titleCase(group);
+    return '';
+  }
+
+  String get categoryLabel => primaryCategory;
+
+  static String _titleCase(String raw) {
+    return raw
+        .split(RegExp(r'[_\s]+'))
+        .where((word) => word.isNotEmpty)
+        .map((word) {
+          final lower = word.toLowerCase();
+          return '${lower[0].toUpperCase()}${lower.substring(1)}';
+        })
+        .join(' ');
   }
 
   Place copyWith({

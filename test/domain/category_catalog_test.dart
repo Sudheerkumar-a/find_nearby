@@ -6,12 +6,12 @@ void main() {
   test('default catalog has the seven main categories', () {
     expect(CategoryCatalog.defaults.map((c) => c.id).toList(), [
       'food',
+      'entertainment',
+      'services',
       'travel',
       'education',
       'health',
       'shopping',
-      'services',
-      'entertainment',
     ]);
   });
 
@@ -20,7 +20,7 @@ void main() {
     expect(food, isNotNull);
     expect(
       food!.subcategories.map((s) => s.id),
-      containsAll(['restaurants', 'cafes']),
+      containsAll(['restaurants', 'indian', 'chinese', 'cafes']),
     );
     expect(
       food.subcategories.firstWhere((s) => s.id == 'restaurants').placeCategory,

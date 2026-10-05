@@ -103,54 +103,108 @@ class PlaceCard extends StatelessWidget {
                         const SizedBox(height: 4),
                         Row(
                           children: [
-                            RatingWidget(
-                              rating: place.rating,
-                              reviewCount: place.reviewCount,
-                            ),
-                            const Spacer(),
+                            // RatingWidget(
+                            //   rating: place.rating,
+                            //   reviewCount: place.reviewCount,
+                            // ),
+                            // const Spacer(),
                             DistanceWidget(
                               meters: place.distanceMeters,
                               compact: true,
                             ),
-                          ],
-                        ),
-                        const SizedBox(height: 2),
-                        Row(
-                          children: [
-                            OpeningStatus(isOpen: place.isOpen),
+                            const SizedBox(width: 8),
                             if (category.isNotEmpty) ...[
-                              Padding(
-                                padding: const EdgeInsets.symmetric(
-                                  horizontal: 6,
-                                ),
-                                child: Text(
-                                  '·',
-                                  style: text.bodySmall?.copyWith(color: muted),
+                              // Padding(
+                              //   padding: const EdgeInsets.symmetric(
+                              //     horizontal: 6,
+                              //   ),
+                              //   child: Text(
+                              //     '·',
+                              //     style: text.bodySmall?.copyWith(color: muted),
+                              //   ),
+                              // ),
+                              Expanded(
+                                child: Text.rich(
+                                  textAlign: TextAlign.end,
+                                  TextSpan(
+                                    text: '',
+                                    children: [
+                                      WidgetSpan(
+                                        alignment: PlaceholderAlignment.middle,
+                                        child: Padding(
+                                          padding: const EdgeInsets.only(
+                                            right: 4,
+                                          ),
+                                          child: Icon(
+                                            iconFromName(_categoryIcon(place)),
+                                            size: 14,
+                                            color: muted,
+                                          ),
+                                        ),
+                                      ),
+                                      TextSpan(
+                                        text: category,
+                                        style: text.bodySmall,
+                                      ),
+                                    ],
+                                  ),
                                 ),
                               ),
-                              Icon(
-                                iconFromName(_categoryIcon(place)),
-                                size: 14,
-                                color: muted,
-                              ),
-                              const SizedBox(width: 4),
-                              Flexible(
-                                child: Text(
-                                  category,
-                                  maxLines: 1,
-                                  overflow: TextOverflow.ellipsis,
-                                  style: text.bodySmall?.copyWith(color: muted),
-                                ),
-                              ),
+                              // Icon(
+                              //   iconFromName(_categoryIcon(place)),
+                              //   size: 14,
+                              //   color: muted,
+                              // ),
+                              // const SizedBox(width: 4),
+                              // Flexible(
+                              //   child: Text(
+                              //     category,
+                              //     maxLines: 1,
+                              //     overflow: TextOverflow.ellipsis,
+                              //     style: text.bodySmall?.copyWith(color: muted),
+                              //   ),
+                              // ),
                             ],
                           ],
                         ),
+                        //const SizedBox(height: 2),
+                        // Row(
+                        //   children: [
+                        //     OpeningStatus(isOpen: place.isOpen),
+                        //     if (category.isNotEmpty) ...[
+                        //       Padding(
+                        //         padding: const EdgeInsets.symmetric(
+                        //           horizontal: 6,
+                        //         ),
+                        //         child: Text(
+                        //           '·',
+                        //           style: text.bodySmall?.copyWith(color: muted),
+                        //         ),
+                        //       ),
+                        //       Icon(
+                        //         iconFromName(_categoryIcon(place)),
+                        //         size: 14,
+                        //         color: muted,
+                        //       ),
+                        //       const SizedBox(width: 4),
+                        //       Flexible(
+                        //         child: Text(
+                        //           category,
+                        //           maxLines: 1,
+                        //           overflow: TextOverflow.ellipsis,
+                        //           style: text.bodySmall?.copyWith(color: muted),
+                        //         ),
+                        //       ),
+                        //     ],
+                        //   ],
+                        // ),
                       ],
                     ),
                   ),
                 ],
               ),
-              if (place.address != null && place.address!.trim().isNotEmpty) ...[
+              if (place.address != null &&
+                  place.address!.trim().isNotEmpty) ...[
                 const SizedBox(height: 8),
                 Row(
                   crossAxisAlignment: CrossAxisAlignment.start,

@@ -12,6 +12,7 @@
 		<string>https</string>
 		<string>http</string>
 		<string>comgooglemaps</string>
+		<string>waze</string>
 	</array>
 	<key>CADisableMinimumFrameDurationOnPhone</key>
 	<true/>

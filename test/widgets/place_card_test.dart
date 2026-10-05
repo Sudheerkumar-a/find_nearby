@@ -30,7 +30,7 @@ void main() {
     expect(find.byIcon(Icons.call_outlined), findsOneWidget);
     expect(find.byIcon(Icons.near_me_outlined), findsOneWidget);
     expect(find.byIcon(Icons.favorite_border_rounded), findsOneWidget);
-    expect(find.text('Open now'), findsOneWidget);
+    expect(find.textContaining('Hospitals'), findsOneWidget);
     expect(find.text('Call'), findsOneWidget);
     expect(find.text('Directions'), findsOneWidget);
 
@@ -65,6 +65,6 @@ void main() {
       find.widgetWithText(FilledButton, 'Call'),
     );
     expect(callButton.onPressed, isNull);
-    expect(find.text('No ratings yet'), findsOneWidget);
+    expect(find.textContaining('Desserts'), findsOneWidget);
   });
 }

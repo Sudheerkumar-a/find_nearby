@@ -5,6 +5,8 @@ import 'package:go_router/go_router.dart';
 import '../../../core/extensions/context_ext.dart';
 import '../../../core/router/app_router.dart';
 import '../../../core/utils/device_actions.dart';
+import '../../../core/utils/directions_launcher.dart';
+import '../../location/application/location_controller.dart';
 import '../../../core/widgets/empty_state.dart';
 import '../../../core/widgets/error_state.dart';
 import '../../../core/widgets/loading_skeleton.dart';
@@ -108,10 +110,12 @@ class FavoritesScreen extends ConsumerWidget {
                               () => DeviceActions.dial(place.phoneNumber!),
                             ),
                             onDirections: () => context.runAction(
-                              () => DeviceActions.directions(
+                              () => DirectionsLauncher.show(
+                                context,
                                 latitude: place.latitude,
                                 longitude: place.longitude,
                                 name: place.name,
+                                origin: ref.read(locationProvider).point,
                               ),
                             ),
                           );

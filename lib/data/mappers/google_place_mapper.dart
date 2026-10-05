@@ -1,9 +1,11 @@
+import '../../core/utils/google_place_type_priority.dart';
 import '../../domain/entities/place.dart';
 
 abstract final class GooglePlaceMapper {
+  // static const listFieldMask =
+  //     'places.id,places.displayName,places.formattedAddress,places.location,places.rating,places.userRatingCount,places.currentOpeningHours.openNow,places.types,places.photos.name,places.priceLevel';
   static const listFieldMask =
-      'places.id,places.displayName,places.formattedAddress,places.location,places.rating,places.userRatingCount,places.currentOpeningHours.openNow,places.types,places.photos.name,places.priceLevel';
-
+      'places.id,places.displayName,places.formattedAddress,places.location,places.types,places.photos';
   static const detailsFieldMask =
       'id,displayName,formattedAddress,location,rating,userRatingCount,nationalPhoneNumber,internationalPhoneNumber,websiteUri,currentOpeningHours,regularOpeningHours,editorialSummary,photos,priceLevel,types';
 
@@ -77,29 +79,7 @@ abstract final class GooglePlaceMapper {
   }
 
   static (String?, String?) _categoryFromTypes(List<String> types) {
-    const map = {
-      'restaurant': ('Food', 'Restaurants'),
-      'cafe': ('Food', 'Cafes'),
-      'bakery': ('Food', 'Bakeries'),
-      'hospital': ('Health', 'Hospitals'),
-      'pharmacy': ('Health', 'Pharmacies'),
-      'dentist': ('Health', 'Dental Clinics'),
-      'hotel': ('Travel', 'Hotels'),
-      'airport': ('Travel', 'Airports'),
-      'shopping_mall': ('Shopping', 'Shopping Malls'),
-      'supermarket': ('Shopping', 'Supermarkets'),
-      'bank': ('Services', 'Banks'),
-      'atm': ('Services', 'ATMs'),
-      'movie_theater': ('Entertainment', 'Cinemas'),
-      'park': ('Entertainment', 'Parks'),
-      'museum': ('Entertainment', 'Museums'),
-      'school': ('Education', 'Schools'),
-      'university': ('Education', 'Universities'),
-    };
-    for (final type in types) {
-      final mapped = map[type];
-      if (mapped != null) return mapped;
-    }
-    return (types.firstOrNull, null);
+    final (group, display) = GooglePlaceTypePriority.resolve(types);
+    return (group, display);
   }
 }

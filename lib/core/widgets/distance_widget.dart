@@ -17,7 +17,7 @@ class DistanceWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final scheme = Theme.of(context).colorScheme;
-    final color = scheme.onSurface.withValues(alpha: 0.85);
+    final color = scheme.onPrimaryContainer;
     final icon = compact ? Icons.directions_walk_rounded : Icons.place_outlined;
     final parts = compact
         ? [Distance.format(meters)]
@@ -42,7 +42,9 @@ class DistanceWidget extends StatelessWidget {
               parts.join(' · '),
               maxLines: 1,
               overflow: TextOverflow.ellipsis,
-              style: Theme.of(context).textTheme.bodySmall?.copyWith(color: color),
+              style: Theme.of(
+                context,
+              ).textTheme.bodySmall?.copyWith(color: color),
             ),
           ),
       ],

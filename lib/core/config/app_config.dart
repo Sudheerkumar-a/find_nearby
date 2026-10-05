@@ -28,20 +28,22 @@ abstract final class AppConfig {
   static bool get hasPlacesKey => googlePlacesApiKey.isNotEmpty;
   static bool get hasGeoapifyKey => geoapifyApiKey.isNotEmpty;
 
-  static String _read(String dotenvKey, {required String fromEnvironment}) {
+  static String _read(String dotenvKey, {String fromEnvironment = ''}) {
     const compiledPlaces = String.fromEnvironment('GOOGLE_PLACES_API_KEY');
     const compiledMaps = String.fromEnvironment('GOOGLE_MAPS_API_KEY');
     const compiledGeo = String.fromEnvironment('GEOAPIFY_API_KEY');
     const compiledProvider = String.fromEnvironment('PLACE_PROVIDER');
 
-    final fromDefine = switch (fromEnvironment) {
-      'GOOGLE_PLACES_API_KEY' => compiledPlaces,
-      'GOOGLE_MAPS_API_KEY' => compiledMaps,
-      'GEOAPIFY_API_KEY' => compiledGeo,
-      'PLACE_PROVIDER' => compiledProvider,
-      _ => '',
-    };
-    if (fromDefine.isNotEmpty) return fromDefine;
+    if (fromEnvironment.isNotEmpty) {
+      final fromDefine = switch (fromEnvironment) {
+        'GOOGLE_PLACES_API_KEY' => compiledPlaces,
+        'GOOGLE_MAPS_API_KEY' => compiledMaps,
+        'GEOAPIFY_API_KEY' => compiledGeo,
+        'PLACE_PROVIDER' => compiledProvider,
+        _ => '',
+      };
+      if (fromDefine.isNotEmpty) return fromDefine;
+    }
 
     if (dotenv.isInitialized) {
       return dotenv.maybeGet(dotenvKey)?.trim() ?? '';

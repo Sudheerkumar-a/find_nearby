@@ -29,6 +29,8 @@ void main() {
     expect(place.hasWebsite, isTrue);
     expect(place.isOpen, isTrue);
     expect(place.category, 'Health');
+    expect(place.subcategory, 'Pharmacy');
+    expect(place.primaryCategory, 'Pharmacy');
     expect(place.priceLevel, 2);
     expect(place.photos.single, contains('test-key'));
   });

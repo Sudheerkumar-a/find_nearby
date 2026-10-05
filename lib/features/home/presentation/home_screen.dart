@@ -7,6 +7,8 @@ import '../../../core/extensions/context_ext.dart';
 import '../../../core/router/app_router.dart';
 import '../../../core/theme/app_colors.dart';
 import '../../../core/utils/device_actions.dart';
+import '../../../core/utils/directions_launcher.dart';
+import '../../../core/errors/app_exception.dart';
 import '../../../core/widgets/app_search_bar.dart';
 import '../../../core/widgets/category_chip.dart';
 import '../../../core/widgets/empty_state.dart';
@@ -26,14 +28,26 @@ import '../../filters/presentation/filter_bottom_sheet.dart';
 import '../../location/application/location_controller.dart';
 import '../../location/presentation/location_picker_sheet.dart';
 import '../../places/application/discovery_providers.dart';
+import '../../update/presentation/home_update_checker.dart';
+
+const _sectionPad = EdgeInsets.fromLTRB(20, 12, 20, 6);
 
 class HomeScreen extends ConsumerWidget {
   const HomeScreen({super.key});
 
-  static const _sectionPad = EdgeInsets.fromLTRB(20, 12, 20, 6);
-
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    return HomeUpdateChecker(child: _HomeBody(ref: ref));
+  }
+}
+
+class _HomeBody extends StatelessWidget {
+  const _HomeBody({required this.ref});
+
+  final WidgetRef ref;
+
+  @override
+  Widget build(BuildContext context) {
     final location = ref.watch(locationProvider);
     final filters = ref.watch(filtersProvider);
     final categories = ref.watch(enabledCategoriesProvider);
@@ -262,61 +276,83 @@ class HomeScreen extends ConsumerWidget {
                 ),
               ),
             ),
-            ...nearby.when(
-              data: (places) {
-                if (places.isEmpty) {
-                  return [
-                    const SliverToBoxAdapter(
-                      child: EmptyState(
-                        title: 'Nothing nearby',
-                        message:
-                            'Try a wider search radius or a different category.',
-                      ),
-                    ),
-                  ];
-                }
-                return [
-                  SliverPadding(
-                    padding: const EdgeInsets.fromLTRB(20, 0, 20, 32),
-                    sliver: SliverList.separated(
-                      itemCount: places.length,
-                      separatorBuilder: (context, index) =>
-                          const SizedBox(height: 10),
-                      itemBuilder: (context, index) {
-                        return _HomePlaceCard(
-                          place: places[index],
-                          isFavorite: favoriteIds.contains(places[index].id),
-                        );
-                      },
-                    ),
-                  ),
-                ];
-              },
-              loading: () => [
-                SliverPadding(
-                  padding: const EdgeInsets.fromLTRB(20, 0, 20, 32),
-                  sliver: SliverList.separated(
-                    itemCount: 3,
-                    separatorBuilder: (context, index) =>
-                        const SizedBox(height: 10),
-                    itemBuilder: (context, index) => const PlaceCardSkeleton(),
-                  ),
-                ),
-              ],
-              error: (error, _) => [
-                SliverToBoxAdapter(
-                  child: ErrorState.fromError(
-                    error,
-                    onRetry: () => ref.invalidate(nearbyPlacesProvider),
-                  ),
-                ),
-              ],
+            ..._nearbySlivers(
+              nearby: nearby,
+              locationReady: location.isReady,
+              favoriteIds: favoriteIds,
+              onRetry: () => ref.invalidate(nearbyPlacesProvider),
             ),
           ],
         ),
       ),
     );
   }
+}
+
+List<Widget> _nearbySlivers({
+  required AsyncValue<List<Place>> nearby,
+  required bool locationReady,
+  required Set<String> favoriteIds,
+  required VoidCallback onRetry,
+}) {
+  if (!locationReady) {
+    return _nearbyLoadingSlivers();
+  }
+
+  return nearby.when(
+    loading: _nearbyLoadingSlivers,
+    error: (error, _) {
+      if (error is LocationNotReadyException) {
+        return _nearbyLoadingSlivers();
+      }
+      return [
+        SliverToBoxAdapter(
+          child: ErrorState.fromError(error, onRetry: onRetry),
+        ),
+      ];
+    },
+    data: (places) {
+      if (places.isEmpty) {
+        return [
+          const SliverToBoxAdapter(
+            child: EmptyState(
+              title: 'Nothing nearby',
+              message:
+                  'Try a wider search radius or a different category.',
+            ),
+          ),
+        ];
+      }
+      return [
+        SliverPadding(
+          padding: const EdgeInsets.fromLTRB(20, 0, 20, 32),
+          sliver: SliverList.separated(
+            itemCount: places.length,
+            separatorBuilder: (context, index) => const SizedBox(height: 10),
+            itemBuilder: (context, index) {
+              return _HomePlaceCard(
+                place: places[index],
+                isFavorite: favoriteIds.contains(places[index].id),
+              );
+            },
+          ),
+        ),
+      ];
+    },
+  );
+}
+
+List<Widget> _nearbyLoadingSlivers() {
+  return [
+    SliverPadding(
+      padding: const EdgeInsets.fromLTRB(20, 0, 20, 32),
+      sliver: SliverList.separated(
+        itemCount: 3,
+        separatorBuilder: (context, index) => const SizedBox(height: 10),
+        itemBuilder: (context, index) => const PlaceCardSkeleton(),
+      ),
+    ),
+  ];
 }
 
 class _HomePlaceCard extends ConsumerWidget {
@@ -327,6 +363,8 @@ class _HomePlaceCard extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final origin = ref.read(locationProvider).point;
+
     return PlaceCard(
       place: place,
       isFavorite: isFavorite,
@@ -335,10 +373,12 @@ class _HomePlaceCard extends ConsumerWidget {
       onCall: () =>
           context.runAction(() => DeviceActions.dial(place.phoneNumber!)),
       onDirections: () => context.runAction(
-        () => DeviceActions.directions(
+        () => DirectionsLauncher.show(
+          context,
           latitude: place.latitude,
           longitude: place.longitude,
           name: place.name,
+          origin: origin,
         ),
       ),
     );
