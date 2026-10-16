@@ -2,6 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../../ads/ad_config.dart';
+import '../../../ads/ad_service.dart';
+import '../../../ads/banner_ad_widget.dart';
+import '../../../ads/native_ad_widget.dart';
 import '../../../core/constants/app_constants.dart';
 import '../../../core/di/providers.dart';
 import '../../../core/extensions/context_ext.dart';
@@ -34,10 +38,16 @@ class _SearchScreenState extends ConsumerState<SearchScreen> {
   void initState() {
     super.initState();
     _controller = TextEditingController(text: ref.read(searchQueryProvider));
+    AdService.instance.ready.addListener(_onAdsReady);
+  }
+
+  void _onAdsReady() {
+    if (mounted) setState(() {});
   }
 
   @override
   void dispose() {
+    AdService.instance.ready.removeListener(_onAdsReady);
     _debouncer.dispose();
     _controller.dispose();
     super.dispose();
@@ -70,6 +80,7 @@ class _SearchScreenState extends ConsumerState<SearchScreen> {
             ),
           ),
           Expanded(child: _body(query, results, history, favoriteIds)),
+          if (query.trim().length >= 2) const BannerAdWidget(safeBottom: true),
         ],
       ),
     );
@@ -159,20 +170,33 @@ class _SearchScreenState extends ConsumerState<SearchScreen> {
             message: 'Try another search or widen the radius in Filters.',
           );
         }
+        final slots = AdPlacement.slots(
+          places.length,
+          includeAds:
+              AdService.instance.canRequestAds && AdConfig.nativeAdsEnabled,
+        );
         return ListView.separated(
           padding: const EdgeInsets.fromLTRB(20, 0, 20, 24),
-          itemCount: places.length,
+          itemCount: slots.length,
           separatorBuilder: (context, index) => const SizedBox(height: 14),
           itemBuilder: (context, index) {
-            final place = places[index];
+            final slot = slots[index];
+            if (slot.isAd) {
+              return NativeAdWidget(key: ValueKey('search-ad-${slot.adIndex}'));
+            }
+            final place = places[slot.placeIndex];
             return PlaceCard(
               place: place,
               isFavorite: favoriteIds.contains(place.id),
               onOpen: () => context.push(AppRoutes.place(place.id)),
               onFavorite: () => ref.read(favoriteToggleProvider)(place),
-              onCall: () => context.runAction(
-                () => DeviceActions.dial(place.phoneNumber!),
-              ),
+              onCall: () => () {
+                if (place.hasPhone) {
+                  context.runAction(
+                    () => DeviceActions.dial(place.phoneNumber!),
+                  );
+                }
+              },
               onDirections: () => context.runAction(
                 () => DirectionsLauncher.show(
                   context,

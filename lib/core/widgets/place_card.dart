@@ -234,7 +234,7 @@ class PlaceCard extends StatelessWidget {
                           : 'Phone number unavailable',
                       icon: Icons.call_outlined,
                       label: 'Call',
-                      onPressed: place.hasPhone ? onCall : null,
+                      onPressed: onCall,
                     ),
                     _ActionPill(
                       tooltip: 'Directions',

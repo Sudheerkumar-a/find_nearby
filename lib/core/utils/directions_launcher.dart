@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:map_launcher/map_launcher.dart';
+import 'package:map_launcher/map_launcher_platform_interface.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../../domain/entities/place.dart';
 import '../errors/app_exception.dart';
@@ -8,7 +10,7 @@ import '../errors/app_exception.dart';
 const directionMapApps = <MapApp>[MapApp.google, MapApp.apple, MapApp.waze];
 
 abstract final class DirectionsLauncher {
-  /// Shows installed map apps; opens route preview (not turn-by-turn start).
+  /// Shows installed map apps. Waze stops on the route list; other apps preview the route.
   static Future<void> show(
     BuildContext context, {
     required double latitude,
@@ -34,7 +36,7 @@ abstract final class DirectionsLauncher {
     }
 
     if (maps.length == 1) {
-      await _openDirectionsMap(maps.first);
+      await _openDirectionsMap(maps.first, destination);
       return;
     }
 
@@ -42,13 +44,30 @@ abstract final class DirectionsLauncher {
     await showModalBottomSheet<void>(
       context: context,
       showDragHandle: true,
-      builder: (sheetContext) => _MapAppPickerSheet(maps: maps),
+      builder: (sheetContext) =>
+          _MapAppPickerSheet(maps: maps, destination: destination),
     );
   }
 }
 
-Future<void> _openDirectionsMap(SupportedMap map) async {
+/// Universal link pinned to the Waze app. The `waze://` scheme skips the
+/// route list and starts the best route.
+Uri wazeNavigationUri(double latitude, double longitude) {
+  return Uri.https('waze.com', '/ul', {
+    'll': '$latitude,$longitude',
+    'navigate': 'yes',
+  });
+}
+
+Future<void> _openDirectionsMap(
+  SupportedMap map,
+  LocationCoords destination,
+) async {
   try {
+    if (map.map == MapApp.waze) {
+      await _openWaze(destination);
+      return;
+    }
     await map.show();
   } on MapLaunchException {
     throw const ActionUnavailableException(
@@ -57,10 +76,32 @@ Future<void> _openDirectionsMap(SupportedMap map) async {
   }
 }
 
+Future<void> _openWaze(LocationCoords destination) async {
+  final uri = wazeNavigationUri(destination.lat, destination.lng);
+  try {
+    await MapLauncherPlatform.instance.launch(
+      uri.toString(),
+      androidPackageName: 'com.waze',
+    );
+  } on Exception {
+    final opened = await launchUrl(
+      Uri.https('waze.com', '/ul', {
+        'll': '${destination.lat},${destination.lng}',
+        'navigate': 'yes',
+      }),
+      mode: LaunchMode.externalNonBrowserApplication,
+    );
+    if (!opened) {
+      throw const ActionUnavailableException(message: 'Could not open Waze.');
+    }
+  }
+}
+
 class _MapAppPickerSheet extends StatelessWidget {
-  const _MapAppPickerSheet({required this.maps});
+  const _MapAppPickerSheet({required this.maps, required this.destination});
 
   final List<SupportedMap> maps;
+  final LocationCoords destination;
 
   @override
   Widget build(BuildContext context) {
@@ -84,7 +125,7 @@ class _MapAppPickerSheet extends StatelessWidget {
               title: Text(map.name),
               onTap: () async {
                 Navigator.of(context).pop();
-                await _openDirectionsMap(map);
+                await _openDirectionsMap(map, destination);
               },
             ),
           const SizedBox(height: 8),

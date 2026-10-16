@@ -106,9 +106,13 @@ class FavoritesScreen extends ConsumerWidget {
                                 context.push(AppRoutes.place(place.id)),
                             onFavorite: () =>
                                 ref.read(favoriteToggleProvider)(place),
-                            onCall: () => context.runAction(
-                              () => DeviceActions.dial(place.phoneNumber!),
-                            ),
+                            onCall: () {
+                              if (place.hasPhone) {
+                                context.runAction(
+                                  () => DeviceActions.dial(place.phoneNumber!),
+                                );
+                              }
+                            },
                             onDirections: () => context.runAction(
                               () => DirectionsLauncher.show(
                                 context,

@@ -9,12 +9,7 @@ abstract final class AppConstants {
   static const double minRadiusMeters = 5000;
   static const double maxRadiusMeters = 50000;
   static const double defaultRadiusMeters = minRadiusMeters;
-  static const List<double> radiusPresetsMeters = [
-    5000,
-    10000,
-    25000,
-    50000,
-  ];
+  static const List<double> radiusPresetsMeters = [5000, 10000, 25000, 50000];
 
   static const int searchHistoryLimit = 12;
   static const int nearbyPageSize = 20;

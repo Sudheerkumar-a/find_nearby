@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../../ads/ad_service.dart';
 import '../../../core/constants/app_constants.dart';
 import '../../../core/di/providers.dart';
 import '../../../core/extensions/context_ext.dart';
@@ -54,7 +55,8 @@ class SettingsScreen extends ConsumerWidget {
             leading: const Icon(Icons.my_location_outlined),
             title: const Text('Use Current Location'),
             subtitle: const Text('Switch back to GPS'),
-            onTap: () => ref.read(locationProvider.notifier).useDeviceLocation(),
+            onTap: () =>
+                ref.read(locationProvider.notifier).useDeviceLocation(),
           ),
           const Divider(),
           Padding(
@@ -138,6 +140,18 @@ class SettingsScreen extends ConsumerWidget {
             onTap: () => context.runAction(
               () => DeviceActions.website(AppConstants.privacyPolicyUrl),
             ),
+          ),
+          ValueListenableBuilder<bool>(
+            valueListenable: AdService.instance.privacyOptionsRequired,
+            builder: (context, showChoices, _) {
+              if (!showChoices) return const SizedBox.shrink();
+              return ListTile(
+                leading: const Icon(Icons.ads_click_outlined),
+                title: const Text('Ad privacy choices'),
+                subtitle: const Text('Manage ad personalization'),
+                onTap: () => AdService.instance.showPrivacyOptions(),
+              );
+            },
           ),
           ListTile(
             leading: const Icon(Icons.article_outlined),

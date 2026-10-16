@@ -31,6 +31,9 @@ android {
             }
             ?: ""
         manifestPlaceholders["GOOGLE_MAPS_API_KEY"] = mapsKey
+        // Debug and profile. Release overrides this with the production app id.
+        manifestPlaceholders["ADMOB_APP_ID"] =
+            "ca-app-pub-3940256099942544~3347511713"
     }
 
     buildTypes {
@@ -38,6 +41,8 @@ android {
             // TODO: Add your own signing config for the release build.
             // Signing with the debug keys for now, so `flutter run --release` works.
             signingConfig = signingConfigs.getByName("debug")
+            manifestPlaceholders["ADMOB_APP_ID"] =
+                "ca-app-pub-2570794718335687~9630952083"
         }
     }
 }

@@ -50,6 +50,73 @@ enum PlaceCategory {
   gaming,
   sportsCenter,
   theatre,
+
+  bar,
+  mealDelivery,
+  mealTakeaway,
+  seafood,
+
+  bicycleStore,
+  bookStore,
+  florist,
+  furnitureStore,
+  hardwareStore,
+  homeGoodsStore,
+  jewelryStore,
+  liquorStore,
+  petStore,
+  shoeStore,
+  generalStore,
+
+  accounting,
+  carDealer,
+  carWash,
+  electrician,
+  insuranceAgency,
+  lawyer,
+  locksmith,
+  movingCompany,
+  realEstateAgency,
+  storage,
+  spa,
+
+  physiotherapist,
+  veterinaryCare,
+
+  evCharging,
+  campground,
+  parking,
+  rvPark,
+  subwayStation,
+  taxiStand,
+  transitStation,
+
+  amusementPark,
+  aquarium,
+  artGallery,
+  bowlingAlley,
+  casino,
+  movieRental,
+  nightClub,
+  stadium,
+  zoo,
+  nationalPark,
+  swimmingPool,
+
+  cemetery,
+  church,
+  cityHall,
+  courthouse,
+  embassy,
+  fireStation,
+  funeralHome,
+  hinduTemple,
+  governmentOffice,
+  mosque,
+  police,
+  synagogue,
+
+  preschool,
 }
 
 /// Top-level groups shown on Home / Explore.
@@ -84,6 +151,10 @@ extension PlaceCategoryGroupX on PlaceCategoryGroup {
       PlaceCategory.bakery,
       PlaceCategory.dessert,
       PlaceCategory.foodCourt,
+      PlaceCategory.bar,
+      PlaceCategory.mealDelivery,
+      PlaceCategory.mealTakeaway,
+      PlaceCategory.seafood,
     ],
     PlaceCategoryGroup.travel => const [
       PlaceCategory.hotel,
@@ -93,6 +164,13 @@ extension PlaceCategoryGroupX on PlaceCategoryGroup {
       PlaceCategory.trainStation,
       PlaceCategory.travelAgency,
       PlaceCategory.carRental,
+      PlaceCategory.evCharging,
+      PlaceCategory.campground,
+      PlaceCategory.parking,
+      PlaceCategory.rvPark,
+      PlaceCategory.subwayStation,
+      PlaceCategory.taxiStand,
+      PlaceCategory.transitStation,
     ],
     PlaceCategoryGroup.education => const [
       PlaceCategory.school,
@@ -101,6 +179,7 @@ extension PlaceCategoryGroupX on PlaceCategoryGroup {
       PlaceCategory.trainingCenter,
       PlaceCategory.library,
       PlaceCategory.coachingCenter,
+      PlaceCategory.preschool,
     ],
     PlaceCategoryGroup.health => const [
       PlaceCategory.hospital,
@@ -108,6 +187,8 @@ extension PlaceCategoryGroupX on PlaceCategoryGroup {
       PlaceCategory.pharmacy,
       PlaceCategory.dentalClinic,
       PlaceCategory.medicalCenter,
+      PlaceCategory.physiotherapist,
+      PlaceCategory.veterinaryCare,
     ],
     PlaceCategoryGroup.shopping => const [
       PlaceCategory.shoppingMall,
@@ -116,6 +197,17 @@ extension PlaceCategoryGroupX on PlaceCategoryGroup {
       PlaceCategory.clothing,
       PlaceCategory.electronics,
       PlaceCategory.departmentStore,
+      PlaceCategory.bicycleStore,
+      PlaceCategory.bookStore,
+      PlaceCategory.florist,
+      PlaceCategory.furnitureStore,
+      PlaceCategory.hardwareStore,
+      PlaceCategory.homeGoodsStore,
+      PlaceCategory.jewelryStore,
+      PlaceCategory.liquorStore,
+      PlaceCategory.petStore,
+      PlaceCategory.shoeStore,
+      PlaceCategory.generalStore,
     ],
     PlaceCategoryGroup.services => const [
       PlaceCategory.bank,
@@ -126,6 +218,29 @@ extension PlaceCategoryGroupX on PlaceCategoryGroup {
       PlaceCategory.laundry,
       PlaceCategory.postOffice,
       PlaceCategory.gasStation,
+      PlaceCategory.accounting,
+      PlaceCategory.carDealer,
+      PlaceCategory.carWash,
+      PlaceCategory.electrician,
+      PlaceCategory.insuranceAgency,
+      PlaceCategory.lawyer,
+      PlaceCategory.locksmith,
+      PlaceCategory.movingCompany,
+      PlaceCategory.realEstateAgency,
+      PlaceCategory.storage,
+      PlaceCategory.spa,
+      PlaceCategory.cemetery,
+      PlaceCategory.church,
+      PlaceCategory.cityHall,
+      PlaceCategory.courthouse,
+      PlaceCategory.embassy,
+      PlaceCategory.fireStation,
+      PlaceCategory.funeralHome,
+      PlaceCategory.hinduTemple,
+      PlaceCategory.governmentOffice,
+      PlaceCategory.mosque,
+      PlaceCategory.police,
+      PlaceCategory.synagogue,
     ],
     PlaceCategoryGroup.entertainment => const [
       PlaceCategory.cinema,
@@ -134,6 +249,17 @@ extension PlaceCategoryGroupX on PlaceCategoryGroup {
       PlaceCategory.gaming,
       PlaceCategory.sportsCenter,
       PlaceCategory.theatre,
+      PlaceCategory.amusementPark,
+      PlaceCategory.aquarium,
+      PlaceCategory.artGallery,
+      PlaceCategory.bowlingAlley,
+      PlaceCategory.casino,
+      PlaceCategory.movieRental,
+      PlaceCategory.nightClub,
+      PlaceCategory.stadium,
+      PlaceCategory.zoo,
+      PlaceCategory.nationalPark,
+      PlaceCategory.swimmingPool,
     ],
   };
 
@@ -192,6 +318,65 @@ extension PlaceCategoryX on PlaceCategory {
     PlaceCategory.gaming => 'Gaming',
     PlaceCategory.sportsCenter => 'Sports Centers',
     PlaceCategory.theatre => 'Theatres',
+    PlaceCategory.bar => 'Bar',
+    PlaceCategory.mealDelivery => 'Meal delivery',
+    PlaceCategory.mealTakeaway => 'Meal takeaway',
+    PlaceCategory.seafood => 'Sea food',
+    PlaceCategory.bicycleStore => 'Bicycle store',
+    PlaceCategory.bookStore => 'Book store',
+    PlaceCategory.florist => 'Florist',
+    PlaceCategory.furnitureStore => 'Furniture store',
+    PlaceCategory.hardwareStore => 'Hardware store',
+    PlaceCategory.homeGoodsStore => 'Home goods store',
+    PlaceCategory.jewelryStore => 'Jewelry store',
+    PlaceCategory.liquorStore => 'Liquor store',
+    PlaceCategory.petStore => 'Pet store',
+    PlaceCategory.shoeStore => 'Shoe store',
+    PlaceCategory.generalStore => 'Store',
+    PlaceCategory.accounting => 'Accounting',
+    PlaceCategory.carDealer => 'Car dealer',
+    PlaceCategory.carWash => 'Car wash',
+    PlaceCategory.electrician => 'Electrician',
+    PlaceCategory.insuranceAgency => 'Insurance agency',
+    PlaceCategory.lawyer => 'Lawyer',
+    PlaceCategory.locksmith => 'Locksmith',
+    PlaceCategory.movingCompany => 'Moving company',
+    PlaceCategory.realEstateAgency => 'Real estate agency',
+    PlaceCategory.storage => 'Storage',
+    PlaceCategory.spa => 'Spa',
+    PlaceCategory.physiotherapist => 'Physiotherapist',
+    PlaceCategory.veterinaryCare => 'Veterinary care',
+    PlaceCategory.evCharging => 'EV Charging Station',
+    PlaceCategory.campground => 'Campground',
+    PlaceCategory.parking => 'Parking',
+    PlaceCategory.rvPark => 'Rv park',
+    PlaceCategory.subwayStation => 'Subway station',
+    PlaceCategory.taxiStand => 'Taxi stand',
+    PlaceCategory.transitStation => 'Transit station',
+    PlaceCategory.amusementPark => 'Amusement park',
+    PlaceCategory.aquarium => 'Aquarium',
+    PlaceCategory.artGallery => 'Art Gallery',
+    PlaceCategory.bowlingAlley => 'Bowling alley',
+    PlaceCategory.casino => 'Casino',
+    PlaceCategory.movieRental => 'Movie rental',
+    PlaceCategory.nightClub => 'Night club',
+    PlaceCategory.stadium => 'Stadium',
+    PlaceCategory.zoo => 'Zoo',
+    PlaceCategory.nationalPark => 'National park',
+    PlaceCategory.swimmingPool => 'Swimming pool',
+    PlaceCategory.cemetery => 'Cemetery',
+    PlaceCategory.church => 'Church',
+    PlaceCategory.cityHall => 'City hall',
+    PlaceCategory.courthouse => 'Courthouse',
+    PlaceCategory.embassy => 'Embassy',
+    PlaceCategory.fireStation => 'Fire station',
+    PlaceCategory.funeralHome => 'Funeral home',
+    PlaceCategory.hinduTemple => 'Hindu temple',
+    PlaceCategory.governmentOffice => 'Local government office',
+    PlaceCategory.mosque => 'Mosque',
+    PlaceCategory.police => 'Police',
+    PlaceCategory.synagogue => 'Synagogue',
+    PlaceCategory.preschool => 'Play group school',
   };
 
   PlaceCategoryGroup get group => switch (this) {
@@ -200,31 +385,56 @@ extension PlaceCategoryX on PlaceCategory {
     PlaceCategory.fastFood ||
     PlaceCategory.bakery ||
     PlaceCategory.dessert ||
-    PlaceCategory.foodCourt => PlaceCategoryGroup.food,
+    PlaceCategory.foodCourt ||
+    PlaceCategory.bar ||
+    PlaceCategory.mealDelivery ||
+    PlaceCategory.mealTakeaway ||
+    PlaceCategory.seafood => PlaceCategoryGroup.food,
     PlaceCategory.hotel ||
     PlaceCategory.touristAttraction ||
     PlaceCategory.airport ||
     PlaceCategory.busStation ||
     PlaceCategory.trainStation ||
     PlaceCategory.travelAgency ||
-    PlaceCategory.carRental => PlaceCategoryGroup.travel,
+    PlaceCategory.carRental ||
+    PlaceCategory.evCharging ||
+    PlaceCategory.campground ||
+    PlaceCategory.parking ||
+    PlaceCategory.rvPark ||
+    PlaceCategory.subwayStation ||
+    PlaceCategory.taxiStand ||
+    PlaceCategory.transitStation => PlaceCategoryGroup.travel,
     PlaceCategory.school ||
     PlaceCategory.college ||
     PlaceCategory.university ||
     PlaceCategory.trainingCenter ||
     PlaceCategory.library ||
-    PlaceCategory.coachingCenter => PlaceCategoryGroup.education,
+    PlaceCategory.coachingCenter ||
+    PlaceCategory.preschool => PlaceCategoryGroup.education,
     PlaceCategory.hospital ||
     PlaceCategory.clinic ||
     PlaceCategory.pharmacy ||
     PlaceCategory.dentalClinic ||
-    PlaceCategory.medicalCenter => PlaceCategoryGroup.health,
+    PlaceCategory.medicalCenter ||
+    PlaceCategory.physiotherapist ||
+    PlaceCategory.veterinaryCare => PlaceCategoryGroup.health,
     PlaceCategory.shoppingMall ||
     PlaceCategory.supermarket ||
     PlaceCategory.grocery ||
     PlaceCategory.clothing ||
     PlaceCategory.electronics ||
-    PlaceCategory.departmentStore => PlaceCategoryGroup.shopping,
+    PlaceCategory.departmentStore ||
+    PlaceCategory.bicycleStore ||
+    PlaceCategory.bookStore ||
+    PlaceCategory.florist ||
+    PlaceCategory.furnitureStore ||
+    PlaceCategory.hardwareStore ||
+    PlaceCategory.homeGoodsStore ||
+    PlaceCategory.jewelryStore ||
+    PlaceCategory.liquorStore ||
+    PlaceCategory.petStore ||
+    PlaceCategory.shoeStore ||
+    PlaceCategory.generalStore => PlaceCategoryGroup.shopping,
     PlaceCategory.bank ||
     PlaceCategory.atm ||
     PlaceCategory.salon ||
@@ -232,13 +442,47 @@ extension PlaceCategoryX on PlaceCategory {
     PlaceCategory.repairShop ||
     PlaceCategory.laundry ||
     PlaceCategory.postOffice ||
-    PlaceCategory.gasStation => PlaceCategoryGroup.services,
+    PlaceCategory.gasStation ||
+    PlaceCategory.accounting ||
+    PlaceCategory.carDealer ||
+    PlaceCategory.carWash ||
+    PlaceCategory.electrician ||
+    PlaceCategory.insuranceAgency ||
+    PlaceCategory.lawyer ||
+    PlaceCategory.locksmith ||
+    PlaceCategory.movingCompany ||
+    PlaceCategory.realEstateAgency ||
+    PlaceCategory.storage ||
+    PlaceCategory.spa ||
+    PlaceCategory.cemetery ||
+    PlaceCategory.church ||
+    PlaceCategory.cityHall ||
+    PlaceCategory.courthouse ||
+    PlaceCategory.embassy ||
+    PlaceCategory.fireStation ||
+    PlaceCategory.funeralHome ||
+    PlaceCategory.hinduTemple ||
+    PlaceCategory.governmentOffice ||
+    PlaceCategory.mosque ||
+    PlaceCategory.police ||
+    PlaceCategory.synagogue => PlaceCategoryGroup.services,
     PlaceCategory.cinema ||
     PlaceCategory.park ||
     PlaceCategory.museum ||
     PlaceCategory.gaming ||
     PlaceCategory.sportsCenter ||
-    PlaceCategory.theatre => PlaceCategoryGroup.entertainment,
+    PlaceCategory.theatre ||
+    PlaceCategory.amusementPark ||
+    PlaceCategory.aquarium ||
+    PlaceCategory.artGallery ||
+    PlaceCategory.bowlingAlley ||
+    PlaceCategory.casino ||
+    PlaceCategory.movieRental ||
+    PlaceCategory.nightClub ||
+    PlaceCategory.stadium ||
+    PlaceCategory.zoo ||
+    PlaceCategory.nationalPark ||
+    PlaceCategory.swimmingPool => PlaceCategoryGroup.entertainment,
   };
 
   static PlaceCategory? fromName(String? raw) {

@@ -39,10 +39,16 @@ class EmptyState extends StatelessWidget {
               context,
             ).textTheme.bodyMedium?.copyWith(color: colors.onSurfaceVariant),
           ),
-          if (actionLabel != null && onAction != null) ...[
-            const SizedBox(height: 20),
-            FilledButton(onPressed: onAction, child: Text(actionLabel!)),
-          ],
+          if (actionLabel != null && onAction != null)
+            TextButton(
+              onPressed: onAction,
+              style: TextButton.styleFrom(
+                padding: const EdgeInsets.symmetric(horizontal: 8),
+                minimumSize: Size.zero,
+                tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+              ),
+              child: Text(actionLabel!),
+            ),
         ],
       ),
     );

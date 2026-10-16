@@ -2,6 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../../ads/ad_config.dart';
+import '../../../ads/ad_service.dart';
+import '../../../ads/banner_ad_widget.dart';
+import '../../../ads/native_ad_widget.dart';
 import '../../../core/constants/category_catalog.dart';
 import '../../../core/extensions/context_ext.dart';
 import '../../../core/router/app_router.dart';
@@ -22,6 +26,7 @@ import '../../../core/widgets/section_header.dart';
 import '../../../core/widgets/teal_wave_header.dart';
 import '../../../domain/entities/place.dart';
 import '../../categories/application/category_providers.dart';
+import 'subcategory_sheet.dart';
 import '../../favorites/application/favorites_providers.dart';
 import '../../filters/application/filters_controller.dart';
 import '../../filters/presentation/filter_bottom_sheet.dart';
@@ -37,27 +42,55 @@ class HomeScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    return HomeUpdateChecker(child: _HomeBody(ref: ref));
+    return const HomeUpdateChecker(child: _HomeBody());
   }
 }
 
-class _HomeBody extends StatelessWidget {
-  const _HomeBody({required this.ref});
+class _HomeBody extends ConsumerStatefulWidget {
+  const _HomeBody();
 
-  final WidgetRef ref;
+  @override
+  ConsumerState<_HomeBody> createState() => _HomeBodyState();
+}
+
+class _HomeBodyState extends ConsumerState<_HomeBody> {
+  @override
+  void initState() {
+    super.initState();
+    AdService.instance.ready.addListener(_onAdsReady);
+  }
+
+  @override
+  void dispose() {
+    AdService.instance.ready.removeListener(_onAdsReady);
+    super.dispose();
+  }
+
+  void _onAdsReady() {
+    if (mounted) setState(() {});
+  }
 
   @override
   Widget build(BuildContext context) {
     final location = ref.watch(locationProvider);
     final filters = ref.watch(filtersProvider);
     final categories = ref.watch(enabledCategoriesProvider);
-    final selectedCategory = ref.watch(selectedCategoryProvider);
+    final category = ref.watch(selectedCategoryProvider);
     final nearby = ref.watch(nearbyPlacesProvider);
     final favoriteIds = ref.watch(favoriteIdsProvider);
     final quickActions = CategoryCatalog.homeQuickActions;
+    final selectedSub = category?.subcategories
+        .where((item) => item.id == filters.subcategoryId)
+        .firstOrNull;
+    final otherSubs = [
+      if (category != null)
+        for (final sub in category.subcategories)
+          if (sub.id != selectedSub?.id) sub,
+    ];
 
     return Scaffold(
       backgroundColor: AppColors.scaffold,
+      bottomNavigationBar: BannerAdWidget(),
       body: RefreshIndicator(
         color: AppColors.coral,
         onRefresh: () async {
@@ -147,11 +180,12 @@ class _HomeBody extends StatelessWidget {
                           selected: filters.categoryId == category.id,
                           onTap: () {
                             final selected = filters.categoryId == category.id;
-                            ref
-                                .read(filtersProvider.notifier)
-                                .setCategory(
-                                  categoryId: selected ? null : category.id,
-                                );
+                            if (!selected) {
+                              ref
+                                  .read(filtersProvider.notifier)
+                                  .setCategory(categoryId: category.id);
+                            }
+                            showSubcategorySheet(context, category);
                           },
                         );
                       },
@@ -185,43 +219,101 @@ class _HomeBody extends StatelessWidget {
                 ),
               ),
             ),
-            if (selectedCategory != null) ...[
-              const SliverToBoxAdapter(
-                child: SectionHeader(
-                  title: 'Subcategories',
-                  padding: EdgeInsets.fromLTRB(20, 8, 20, 4),
-                ),
-              ),
+            if (category == null)
               SliverToBoxAdapter(
-                child: SizedBox(
-                  height: 36,
-                  child: ListView.separated(
-                    scrollDirection: Axis.horizontal,
-                    padding: const EdgeInsets.symmetric(horizontal: 20),
-                    itemCount: selectedCategory.subcategories.length,
-                    separatorBuilder: (context, index) =>
+                child: Padding(
+                  padding: const EdgeInsets.only(top: 8),
+                  child: SizedBox(
+                    height: 36,
+                    child: ListView.separated(
+                      scrollDirection: Axis.horizontal,
+                      padding: const EdgeInsets.symmetric(horizontal: 20),
+                      itemCount: categories.length,
+                      separatorBuilder: (context, index) =>
+                          const SizedBox(width: 8),
+                      itemBuilder: (context, index) {
+                        final item = categories[index];
+                        final sub = item.subcategories.firstOrNull;
+                        if (sub == null) return const SizedBox.shrink();
+                        return SubcategoryChip(
+                          compact: true,
+                          subcategory: sub,
+                          selected: false,
+                          onTap: () {
+                            ref
+                                .read(filtersProvider.notifier)
+                                .setCategory(
+                                  categoryId: item.id,
+                                  subcategoryId: sub.id,
+                                );
+                          },
+                        );
+                      },
+                    ),
+                  ),
+                ),
+              )
+            else
+              SliverToBoxAdapter(
+                child: Padding(
+                  padding: const EdgeInsets.only(top: 8),
+                  child: Row(
+                    children: [
+                      if (selectedSub != null) ...[
+                        const SizedBox(width: 20),
+                        SubcategoryChip(
+                          compact: true,
+                          subcategory: selectedSub,
+                          selected: true,
+                          onTap: () {},
+                        ),
                         const SizedBox(width: 8),
-                    itemBuilder: (context, index) {
-                      final sub = selectedCategory.subcategories[index];
-                      return SubcategoryChip(
-                        compact: true,
-                        subcategory: sub,
-                        selected: filters.subcategoryId == sub.id,
-                        onTap: () {
-                          final selected = filters.subcategoryId == sub.id;
-                          ref
-                              .read(filtersProvider.notifier)
-                              .setCategory(
-                                categoryId: selectedCategory.id,
-                                subcategoryId: selected ? null : sub.id,
+                      ],
+                      Expanded(
+                        child: SizedBox(
+                          height: 36,
+                          child: ListView.separated(
+                            scrollDirection: Axis.horizontal,
+                            padding: EdgeInsets.only(
+                              left: selectedSub == null ? 20 : 0,
+                              right: 8,
+                            ),
+                            itemCount: otherSubs.length,
+                            separatorBuilder: (context, index) =>
+                                const SizedBox(width: 8),
+                            itemBuilder: (context, index) {
+                              final sub = otherSubs[index];
+                              return SubcategoryChip(
+                                compact: true,
+                                subcategory: sub,
+                                selected: false,
+                                onTap: () {
+                                  ref
+                                      .read(filtersProvider.notifier)
+                                      .setCategory(
+                                        categoryId: category.id,
+                                        subcategoryId: sub.id,
+                                      );
+                                },
                               );
-                        },
-                      );
-                    },
+                            },
+                          ),
+                        ),
+                      ),
+                      IconButton(
+                        tooltip: 'Change subcategory',
+                        visualDensity: VisualDensity.compact,
+                        onPressed: () =>
+                            showSubcategorySheet(context, category),
+                        icon: const Icon(
+                          Icons.swap_horiz_rounded,
+                          color: AppColors.tealDark,
+                        ),
+                      ),
+                    ],
                   ),
                 ),
               ),
-            ],
             const SliverToBoxAdapter(
               child: SectionHeader(
                 title: 'Quick',
@@ -256,7 +348,7 @@ class _HomeBody extends StatelessWidget {
             ),
             SliverToBoxAdapter(
               child: Padding(
-                padding: const EdgeInsets.fromLTRB(20, 10, 8, 6),
+                padding: const EdgeInsets.fromLTRB(20, 4, 8, 0),
                 child: Row(
                   children: [
                     Text(
@@ -269,6 +361,11 @@ class _HomeBody extends StatelessWidget {
                     const Spacer(),
                     TextButton.icon(
                       onPressed: () => context.push(AppRoutes.map),
+                      style: TextButton.styleFrom(
+                        padding: const EdgeInsets.symmetric(horizontal: 8),
+                        minimumSize: Size.zero,
+                        tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                      ),
                       icon: const Icon(Icons.map_outlined),
                       label: const Text('Map'),
                     ),
@@ -280,11 +377,32 @@ class _HomeBody extends StatelessWidget {
               nearby: nearby,
               locationReady: location.isReady,
               favoriteIds: favoriteIds,
+              adsReady: AdService.instance.canRequestAds,
               onRetry: () => ref.invalidate(nearbyPlacesProvider),
+              onOpenMaps: () => context.runAction(_openMapsSearch),
             ),
           ],
         ),
       ),
+    );
+  }
+
+  Future<void> _openMapsSearch() async {
+    final point = ref.read(locationProvider).point;
+    if (point == null) {
+      throw const ActionUnavailableException(
+        message: 'Location is not ready yet.',
+      );
+    }
+    final filters = ref.read(filtersProvider);
+    final category = ref.read(selectedCategoryProvider);
+    final sub = category?.subcategories
+        .where((item) => item.id == filters.subcategoryId)
+        .firstOrNull;
+    await DeviceActions.searchNearbyOnMap(
+      latitude: point.latitude,
+      longitude: point.longitude,
+      query: sub?.query ?? category?.name ?? 'nearby',
     );
   }
 }
@@ -293,7 +411,9 @@ List<Widget> _nearbySlivers({
   required AsyncValue<List<Place>> nearby,
   required bool locationReady,
   required Set<String> favoriteIds,
+  required bool adsReady,
   required VoidCallback onRetry,
+  required VoidCallback onOpenMaps,
 }) {
   if (!locationReady) {
     return _nearbyLoadingSlivers();
@@ -314,27 +434,48 @@ List<Widget> _nearbySlivers({
     data: (places) {
       if (places.isEmpty) {
         return [
-          const SliverToBoxAdapter(
+          SliverToBoxAdapter(
             child: EmptyState(
               title: 'Nothing nearby',
-              message:
-                  'Try a wider search radius or a different category.',
+              message: 'Try a wider search radius or a different category\nor',
+              actionLabel: 'Try here',
+              onAction: onOpenMaps,
             ),
           ),
         ];
       }
+      final slots = AdPlacement.slots(
+        places.length,
+        includeAds: adsReady && AdConfig.nativeAdsEnabled,
+      );
       return [
         SliverPadding(
-          padding: const EdgeInsets.fromLTRB(20, 0, 20, 32),
+          padding: const EdgeInsets.fromLTRB(20, 4, 20, 8),
           sliver: SliverList.separated(
-            itemCount: places.length,
+            itemCount: slots.length,
             separatorBuilder: (context, index) => const SizedBox(height: 10),
             itemBuilder: (context, index) {
+              final slot = slots[index];
+              if (slot.isAd) {
+                return NativeAdWidget(key: ValueKey('home-ad-${slot.adIndex}'));
+              }
+              final place = places[slot.placeIndex];
               return _HomePlaceCard(
-                place: places[index],
-                isFavorite: favoriteIds.contains(places[index].id),
+                place: place,
+                isFavorite: favoriteIds.contains(place.id),
               );
             },
+          ),
+        ),
+        SliverToBoxAdapter(
+          child: Padding(
+            padding: const EdgeInsets.fromLTRB(20, 4, 20, 24),
+            child: Center(
+              child: TextButton(
+                onPressed: onOpenMaps,
+                child: const Text('Load more'),
+              ),
+            ),
           ),
         ),
       ];
@@ -345,7 +486,7 @@ List<Widget> _nearbySlivers({
 List<Widget> _nearbyLoadingSlivers() {
   return [
     SliverPadding(
-      padding: const EdgeInsets.fromLTRB(20, 0, 20, 32),
+      padding: const EdgeInsets.fromLTRB(20, 4, 20, 8),
       sliver: SliverList.separated(
         itemCount: 3,
         separatorBuilder: (context, index) => const SizedBox(height: 10),
@@ -370,8 +511,11 @@ class _HomePlaceCard extends ConsumerWidget {
       isFavorite: isFavorite,
       onOpen: () => context.push(AppRoutes.place(place.id)),
       onFavorite: () => ref.read(favoriteToggleProvider)(place),
-      onCall: () =>
-          context.runAction(() => DeviceActions.dial(place.phoneNumber!)),
+      onCall: () {
+        if (place.hasPhone) {
+          context.runAction(() => DeviceActions.dial(place.phoneNumber!));
+        }
+      },
       onDirections: () => context.runAction(
         () => DirectionsLauncher.show(
           context,
