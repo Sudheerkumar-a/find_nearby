@@ -10,6 +10,7 @@ abstract final class AnalyticsEvents {
   static const categorySelected = 'category_selected';
   static const placeOpened = 'place_opened';
   static const callClicked = 'call_clicked';
+  static const whatsappClicked = 'whatsapp_clicked';
   static const directionsClicked = 'directions_clicked';
   static const websiteClicked = 'website_clicked';
   static const favoriteAdded = 'favorite_added';

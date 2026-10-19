@@ -17,6 +17,7 @@
 		<string>http</string>
 		<string>comgooglemaps</string>
 		<string>waze</string>
+		<string>whatsapp</string>
 	</array>
 	<key>CADisableMinimumFrameDurationOnPhone</key>
 	<true/>

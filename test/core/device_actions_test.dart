@@ -3,6 +3,33 @@ import 'package:find_nearby/domain/entities/place.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {
+  test('whatsapp link opens a chat for the phone number', () {
+    expect(
+      DeviceActions.whatsAppChatUri('+971 50 123 4567').toString(),
+      'https://wa.me/971501234567',
+    );
+    expect(DeviceActions.whatsAppDigits('00971501234567'), '971501234567');
+    expect(DeviceActions.whatsAppDigits('+44 20 7946 0958'), '442079460958');
+    expect(
+      DeviceActions.whatsAppDigits(
+        '0529098488',
+        address: 'Al Quoz, Dubai, United Arab Emirates',
+      ),
+      '971529098488',
+    );
+    expect(
+      DeviceActions.whatsAppDigits(
+        '020 7946 0958',
+        address: '10 Downing Street, London, United Kingdom',
+      ),
+      '442079460958',
+    );
+    expect(
+      DeviceActions.whatsAppDigits('09876543210', address: 'Mumbai, India'),
+      '919876543210',
+    );
+  });
+
   test('nearby map uri searches the subcategory at the user location', () {
     final uri = DeviceActions.nearbyMapUri(
       latitude: 25.2,

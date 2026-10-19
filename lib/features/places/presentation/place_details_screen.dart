@@ -17,6 +17,7 @@ import '../../../core/widgets/favorite_button.dart';
 import '../../../core/widgets/loading_skeleton.dart';
 import '../../../core/widgets/opening_status.dart';
 import '../../../core/widgets/place_image.dart';
+import '../../../core/widgets/whatsapp_icon.dart';
 import '../../../core/widgets/rating_widget.dart';
 import '../../../domain/entities/place.dart';
 import '../../favorites/application/favorites_providers.dart';
@@ -149,7 +150,9 @@ class _DetailsBodyState extends ConsumerState<_DetailsBody> {
                   Row(
                     children: [
                       Expanded(
-                        child: FilledButton.icon(
+                        child: _ContactIconButton(
+                          tooltip: 'Call',
+                          icon: Icons.call_rounded,
                           onPressed: place.hasPhone
                               ? () {
                                   ref.read(analyticsProvider).track(
@@ -162,12 +165,34 @@ class _DetailsBodyState extends ConsumerState<_DetailsBody> {
                                   );
                                 }
                               : null,
-                          icon: const Icon(Icons.call_rounded),
-                          label: const Text('Call'),
                         ),
                       ),
-                      const SizedBox(width: 12),
+                      const SizedBox(width: 8),
                       Expanded(
+                        child: _ContactIconButton(
+                          tooltip: 'WhatsApp',
+                          glyph: const WhatsAppIcon(size: 28),
+                          filled: false,
+                          onPressed: place.hasPhone
+                              ? () {
+                                  ref.read(analyticsProvider).track(
+                                    AnalyticsEvents.whatsappClicked,
+                                    {'place_id': place.id},
+                                  );
+                                  context.runAction(
+                                    () => _openWhatsAppChat(
+                                      context,
+                                      place.phoneNumber!,
+                                      place.address,
+                                    ),
+                                  );
+                                }
+                              : null,
+                        ),
+                      ),
+                      const SizedBox(width: 8),
+                      Expanded(
+                        flex: 2,
                         child: FilledButton.tonalIcon(
                           onPressed: () {
                             ref.read(analyticsProvider).track(
@@ -213,9 +238,9 @@ class _DetailsBodyState extends ConsumerState<_DetailsBody> {
                     ),
                     child: Text.rich(
                       TextSpan(
-                        style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                          color: AppColors.ink,
-                        ),
+                        style: Theme.of(
+                          context,
+                        ).textTheme.bodyMedium?.copyWith(color: AppColors.ink),
                         children: const [
                           TextSpan(text: 'See reviews and more '),
                           TextSpan(
@@ -277,6 +302,77 @@ class _DetailsBodyState extends ConsumerState<_DetailsBody> {
         ),
       ),
     );
+  }
+}
+
+Future<void> _openWhatsAppChat(
+  BuildContext context,
+  String phone,
+  String? address,
+) async {
+  final apps = await DeviceActions.installedWhatsAppApps();
+  if (!context.mounted) return;
+  var package = apps.length == 1 ? apps.single.packageName : null;
+  if (apps.length > 1) {
+    package = await showDialog<String>(
+      context: context,
+      builder: (dialogContext) => SimpleDialog(
+        title: const Text('Open chat'),
+        children: [
+          for (final app in apps)
+            SimpleDialogOption(
+              onPressed: () => Navigator.pop(dialogContext, app.packageName),
+              child: Text(app.label),
+            ),
+        ],
+      ),
+    );
+    if (package == null) return;
+  }
+  await DeviceActions.openWhatsApp(
+    phone,
+    address: address,
+    packageName: package,
+  );
+}
+
+class _ContactIconButton extends StatelessWidget {
+  const _ContactIconButton({
+    required this.tooltip,
+    required this.onPressed,
+    this.icon,
+    this.glyph,
+    this.filled = true,
+  }) : assert(icon != null || glyph != null);
+
+  final String tooltip;
+  final IconData? icon;
+  final Widget? glyph;
+  final VoidCallback? onPressed;
+  final bool filled;
+
+  @override
+  Widget build(BuildContext context) {
+    final style = IconButton.styleFrom(
+      minimumSize: const Size(64, 56),
+      maximumSize: const Size(double.infinity, 56),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+      tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+    );
+    final child = glyph ?? Icon(icon!, size: 28, semanticLabel: tooltip);
+    return filled
+        ? IconButton.filled(
+            tooltip: tooltip,
+            onPressed: onPressed,
+            style: style,
+            icon: child,
+          )
+        : IconButton.filledTonal(
+            tooltip: tooltip,
+            onPressed: onPressed,
+            style: style,
+            icon: child,
+          );
   }
 }
 

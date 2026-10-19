@@ -88,301 +88,327 @@ class _HomeBodyState extends ConsumerState<_HomeBody> {
           if (sub.id != selectedSub?.id) sub,
     ];
 
+    final topInset = MediaQuery.paddingOf(context).top;
+
     return Scaffold(
       backgroundColor: AppColors.scaffold,
       bottomNavigationBar: BannerAdWidget(),
-      body: RefreshIndicator(
-        color: AppColors.coral,
-        onRefresh: () async {
-          await ref.read(locationProvider.notifier).refresh();
-          ref.invalidate(nearbyPlacesProvider);
-        },
-        child: CustomScrollView(
-          slivers: [
-            SliverToBoxAdapter(
-              child: TealWaveHeader(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    LocationHeader(
-                      location: location,
-                      onTeal: true,
-                      onRefresh: () =>
-                          ref.read(locationProvider.notifier).refresh(),
-                      onChangeLocation: () =>
-                          showLocationPickerSheet(context, ref),
-                      onOpenSettings: () =>
-                          ref.read(locationProvider.notifier).openSettings(),
-                    ),
-                    const SizedBox(height: 14),
-                    Row(
-                      children: [
-                        Expanded(
-                          child: Material(
-                            elevation: 2,
-                            shadowColor: Colors.black26,
-                            borderRadius: BorderRadius.circular(16),
-                            child: AppSearchBar(
-                              readOnly: true,
-                              onTap: () => context.push(AppRoutes.search),
+      body: Column(
+        children: [
+          DecoratedBox(
+            decoration: const BoxDecoration(gradient: AppColors.tealHeader),
+            child: SizedBox(height: topInset, width: double.infinity),
+          ),
+          Expanded(
+            child: MediaQuery.removePadding(
+              context: context,
+              removeTop: true,
+              child: RefreshIndicator(
+                color: AppColors.coral,
+                onRefresh: () async {
+                  await ref.read(locationProvider.notifier).refresh();
+                  ref.invalidate(nearbyPlacesProvider);
+                },
+                child: CustomScrollView(
+                  slivers: [
+                    SliverToBoxAdapter(
+                      child: TealWaveHeader(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            LocationHeader(
+                              location: location,
+                              onTeal: true,
+                              onRefresh: () =>
+                                  ref.read(locationProvider.notifier).refresh(),
+                              onChangeLocation: () =>
+                                  showLocationPickerSheet(context, ref),
+                              onOpenSettings: () => ref
+                                  .read(locationProvider.notifier)
+                                  .openSettings(),
                             ),
+                            const SizedBox(height: 14),
+                            Row(
+                              children: [
+                                Expanded(
+                                  child: Material(
+                                    elevation: 2,
+                                    shadowColor: Colors.black26,
+                                    borderRadius: BorderRadius.circular(16),
+                                    child: AppSearchBar(
+                                      readOnly: true,
+                                      onTap: () =>
+                                          context.push(AppRoutes.search),
+                                    ),
+                                  ),
+                                ),
+                                const SizedBox(width: 8),
+                                FilterButton(
+                                  activeCount: filters.activeCount,
+                                  onPressed: () =>
+                                      showFilterBottomSheet(context),
+                                ),
+                              ],
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                    SliverToBoxAdapter(
+                      child: SectionHeader(
+                        title: 'Categories',
+                        padding: _sectionPad,
+                        trailing: TextButton(
+                          onPressed: () => context.go(AppRoutes.explore),
+                          style: TextButton.styleFrom(
+                            foregroundColor: AppColors.tealDark,
+                            padding: const EdgeInsets.symmetric(horizontal: 8),
+                            minimumSize: Size.zero,
+                            tapTargetSize: MaterialTapTargetSize.shrinkWrap,
                           ),
-                        ),
-                        const SizedBox(width: 8),
-                        FilterButton(
-                          activeCount: filters.activeCount,
-                          onPressed: () => showFilterBottomSheet(context),
-                        ),
-                      ],
-                    ),
-                  ],
-                ),
-              ),
-            ),
-            SliverToBoxAdapter(
-              child: SectionHeader(
-                title: 'Categories',
-                padding: _sectionPad,
-                trailing: TextButton(
-                  onPressed: () => context.go(AppRoutes.explore),
-                  style: TextButton.styleFrom(
-                    foregroundColor: AppColors.tealDark,
-                    padding: const EdgeInsets.symmetric(horizontal: 8),
-                    minimumSize: Size.zero,
-                    tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                  ),
-                  child: const Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Text('See all'),
-                      Icon(Icons.chevron_right_rounded, size: 20),
-                    ],
-                  ),
-                ),
-              ),
-            ),
-            SliverToBoxAdapter(
-              child: SizedBox(
-                height: 38,
-                child: Stack(
-                  children: [
-                    ListView.separated(
-                      scrollDirection: Axis.horizontal,
-                      padding: const EdgeInsets.fromLTRB(20, 0, 52, 0),
-                      itemCount: categories.length,
-                      separatorBuilder: (context, index) =>
-                          const SizedBox(width: 8),
-                      itemBuilder: (context, index) {
-                        final category = categories[index];
-                        return CategoryChip(
-                          compact: true,
-                          category: category,
-                          selected: filters.categoryId == category.id,
-                          onTap: () {
-                            final selected = filters.categoryId == category.id;
-                            if (!selected) {
-                              ref
-                                  .read(filtersProvider.notifier)
-                                  .setCategory(categoryId: category.id);
-                            }
-                            showSubcategorySheet(context, category);
-                          },
-                        );
-                      },
-                    ),
-                    Positioned(
-                      right: 0,
-                      top: 0,
-                      bottom: 0,
-                      child: DecoratedBox(
-                        decoration: BoxDecoration(
-                          gradient: LinearGradient(
-                            begin: Alignment.centerLeft,
-                            end: Alignment.centerRight,
-                            colors: [
-                              AppColors.scaffold.withValues(alpha: 0),
-                              AppColors.scaffold,
+                          child: const Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              Text('See all'),
+                              Icon(Icons.chevron_right_rounded, size: 20),
                             ],
                           ),
                         ),
-                        child: IconButton(
-                          tooltip: 'See all categories',
-                          onPressed: () => context.go(AppRoutes.explore),
-                          icon: const Icon(
-                            Icons.chevron_right_rounded,
-                            color: AppColors.inkMuted,
-                          ),
-                        ),
                       ),
                     ),
-                  ],
-                ),
-              ),
-            ),
-            if (category == null)
-              SliverToBoxAdapter(
-                child: Padding(
-                  padding: const EdgeInsets.only(top: 8),
-                  child: SizedBox(
-                    height: 36,
-                    child: ListView.separated(
-                      scrollDirection: Axis.horizontal,
-                      padding: const EdgeInsets.symmetric(horizontal: 20),
-                      itemCount: categories.length,
-                      separatorBuilder: (context, index) =>
-                          const SizedBox(width: 8),
-                      itemBuilder: (context, index) {
-                        final item = categories[index];
-                        final sub = item.subcategories.firstOrNull;
-                        if (sub == null) return const SizedBox.shrink();
-                        return SubcategoryChip(
-                          compact: true,
-                          subcategory: sub,
-                          selected: false,
-                          onTap: () {
-                            ref
-                                .read(filtersProvider.notifier)
-                                .setCategory(
-                                  categoryId: item.id,
-                                  subcategoryId: sub.id,
+                    SliverToBoxAdapter(
+                      child: SizedBox(
+                        height: 38,
+                        child: Stack(
+                          children: [
+                            ListView.separated(
+                              scrollDirection: Axis.horizontal,
+                              padding: const EdgeInsets.fromLTRB(20, 0, 52, 0),
+                              itemCount: categories.length,
+                              separatorBuilder: (context, index) =>
+                                  const SizedBox(width: 8),
+                              itemBuilder: (context, index) {
+                                final category = categories[index];
+                                return CategoryChip(
+                                  compact: true,
+                                  category: category,
+                                  selected: filters.categoryId == category.id,
+                                  onTap: () {
+                                    final selected =
+                                        filters.categoryId == category.id;
+                                    if (!selected) {
+                                      ref
+                                          .read(filtersProvider.notifier)
+                                          .setCategory(categoryId: category.id);
+                                    }
+                                    showSubcategorySheet(context, category);
+                                  },
                                 );
-                          },
-                        );
-                      },
-                    ),
-                  ),
-                ),
-              )
-            else
-              SliverToBoxAdapter(
-                child: Padding(
-                  padding: const EdgeInsets.only(top: 8),
-                  child: Row(
-                    children: [
-                      if (selectedSub != null) ...[
-                        const SizedBox(width: 20),
-                        SubcategoryChip(
-                          compact: true,
-                          subcategory: selectedSub,
-                          selected: true,
-                          onTap: () {},
-                        ),
-                        const SizedBox(width: 8),
-                      ],
-                      Expanded(
-                        child: SizedBox(
-                          height: 36,
-                          child: ListView.separated(
-                            scrollDirection: Axis.horizontal,
-                            padding: EdgeInsets.only(
-                              left: selectedSub == null ? 20 : 0,
-                              right: 8,
+                              },
                             ),
-                            itemCount: otherSubs.length,
-                            separatorBuilder: (context, index) =>
+                            Positioned(
+                              right: 0,
+                              top: 0,
+                              bottom: 0,
+                              child: DecoratedBox(
+                                decoration: BoxDecoration(
+                                  gradient: LinearGradient(
+                                    begin: Alignment.centerLeft,
+                                    end: Alignment.centerRight,
+                                    colors: [
+                                      AppColors.scaffold.withValues(alpha: 0),
+                                      AppColors.scaffold,
+                                    ],
+                                  ),
+                                ),
+                                child: IconButton(
+                                  tooltip: 'See all categories',
+                                  onPressed: () =>
+                                      context.go(AppRoutes.explore),
+                                  icon: const Icon(
+                                    Icons.chevron_right_rounded,
+                                    color: AppColors.inkMuted,
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                    if (category == null)
+                      SliverToBoxAdapter(
+                        child: Padding(
+                          padding: const EdgeInsets.only(top: 8),
+                          child: SizedBox(
+                            height: 36,
+                            child: ListView.separated(
+                              scrollDirection: Axis.horizontal,
+                              padding: const EdgeInsets.symmetric(
+                                horizontal: 20,
+                              ),
+                              itemCount: categories.length,
+                              separatorBuilder: (context, index) =>
+                                  const SizedBox(width: 8),
+                              itemBuilder: (context, index) {
+                                final item = categories[index];
+                                final sub = item.subcategories.firstOrNull;
+                                if (sub == null) return const SizedBox.shrink();
+                                return SubcategoryChip(
+                                  compact: true,
+                                  subcategory: sub,
+                                  selected: false,
+                                  onTap: () {
+                                    ref
+                                        .read(filtersProvider.notifier)
+                                        .setCategory(
+                                          categoryId: item.id,
+                                          subcategoryId: sub.id,
+                                        );
+                                  },
+                                );
+                              },
+                            ),
+                          ),
+                        ),
+                      )
+                    else
+                      SliverToBoxAdapter(
+                        child: Padding(
+                          padding: const EdgeInsets.only(top: 8),
+                          child: Row(
+                            children: [
+                              if (selectedSub != null) ...[
+                                const SizedBox(width: 20),
+                                SubcategoryChip(
+                                  compact: true,
+                                  subcategory: selectedSub,
+                                  selected: true,
+                                  onTap: () {},
+                                ),
                                 const SizedBox(width: 8),
-                            itemBuilder: (context, index) {
-                              final sub = otherSubs[index];
-                              return SubcategoryChip(
-                                compact: true,
-                                subcategory: sub,
-                                selected: false,
-                                onTap: () {
-                                  ref
-                                      .read(filtersProvider.notifier)
-                                      .setCategory(
-                                        categoryId: category.id,
-                                        subcategoryId: sub.id,
+                              ],
+                              Expanded(
+                                child: SizedBox(
+                                  height: 36,
+                                  child: ListView.separated(
+                                    scrollDirection: Axis.horizontal,
+                                    padding: EdgeInsets.only(
+                                      left: selectedSub == null ? 20 : 0,
+                                      right: 8,
+                                    ),
+                                    itemCount: otherSubs.length,
+                                    separatorBuilder: (context, index) =>
+                                        const SizedBox(width: 8),
+                                    itemBuilder: (context, index) {
+                                      final sub = otherSubs[index];
+                                      return SubcategoryChip(
+                                        compact: true,
+                                        subcategory: sub,
+                                        selected: false,
+                                        onTap: () {
+                                          ref
+                                              .read(filtersProvider.notifier)
+                                              .setCategory(
+                                                categoryId: category.id,
+                                                subcategoryId: sub.id,
+                                              );
+                                        },
                                       );
-                                },
-                              );
-                            },
+                                    },
+                                  ),
+                                ),
+                              ),
+                              IconButton(
+                                tooltip: 'Change subcategory',
+                                visualDensity: VisualDensity.compact,
+                                onPressed: () =>
+                                    showSubcategorySheet(context, category),
+                                icon: const Icon(
+                                  Icons.swap_horiz_rounded,
+                                  color: AppColors.tealDark,
+                                ),
+                              ),
+                            ],
                           ),
                         ),
                       ),
-                      IconButton(
-                        tooltip: 'Change subcategory',
-                        visualDensity: VisualDensity.compact,
-                        onPressed: () =>
-                            showSubcategorySheet(context, category),
-                        icon: const Icon(
-                          Icons.swap_horiz_rounded,
-                          color: AppColors.tealDark,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-            const SliverToBoxAdapter(
-              child: SectionHeader(
-                title: 'Quick',
-                padding: EdgeInsets.fromLTRB(20, 10, 20, 6),
-              ),
-            ),
-            SliverToBoxAdapter(
-              child: SizedBox(
-                height: 38,
-                child: ListView.separated(
-                  scrollDirection: Axis.horizontal,
-                  padding: const EdgeInsets.symmetric(horizontal: 20),
-                  itemCount: quickActions.length,
-                  separatorBuilder: (context, index) =>
-                      const SizedBox(width: 8),
-                  itemBuilder: (context, index) {
-                    final action = quickActions[index];
-                    return QuickActionButton(
-                      action: action,
-                      onTap: () {
-                        ref
-                            .read(filtersProvider.notifier)
-                            .setCategory(
-                              categoryId: action.categoryId,
-                              subcategoryId: action.subcategoryId,
-                            );
-                      },
-                    );
-                  },
-                ),
-              ),
-            ),
-            SliverToBoxAdapter(
-              child: Padding(
-                padding: const EdgeInsets.fromLTRB(20, 4, 8, 0),
-                child: Row(
-                  children: [
-                    Text(
-                      'Nearby places',
-                      style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                        fontWeight: FontWeight.w800,
-                        color: AppColors.ink,
+                    const SliverToBoxAdapter(
+                      child: SectionHeader(
+                        title: 'Quick',
+                        padding: EdgeInsets.fromLTRB(20, 10, 20, 6),
                       ),
                     ),
-                    const Spacer(),
-                    TextButton.icon(
-                      onPressed: () => context.push(AppRoutes.map),
-                      style: TextButton.styleFrom(
-                        padding: const EdgeInsets.symmetric(horizontal: 8),
-                        minimumSize: Size.zero,
-                        tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                    SliverToBoxAdapter(
+                      child: SizedBox(
+                        height: 38,
+                        child: ListView.separated(
+                          scrollDirection: Axis.horizontal,
+                          padding: const EdgeInsets.symmetric(horizontal: 20),
+                          itemCount: quickActions.length,
+                          separatorBuilder: (context, index) =>
+                              const SizedBox(width: 8),
+                          itemBuilder: (context, index) {
+                            final action = quickActions[index];
+                            return QuickActionButton(
+                              action: action,
+                              onTap: () {
+                                ref
+                                    .read(filtersProvider.notifier)
+                                    .setCategory(
+                                      categoryId: action.categoryId,
+                                      subcategoryId: action.subcategoryId,
+                                    );
+                              },
+                            );
+                          },
+                        ),
                       ),
-                      icon: const Icon(Icons.map_outlined),
-                      label: const Text('Map'),
+                    ),
+                    SliverToBoxAdapter(
+                      child: Padding(
+                        padding: const EdgeInsets.fromLTRB(20, 4, 8, 0),
+                        child: Row(
+                          children: [
+                            Text(
+                              'Nearby places',
+                              style: Theme.of(context).textTheme.titleMedium
+                                  ?.copyWith(
+                                    fontWeight: FontWeight.w800,
+                                    color: AppColors.ink,
+                                  ),
+                            ),
+                            const Spacer(),
+                            TextButton.icon(
+                              onPressed: () => context.push(AppRoutes.map),
+                              style: TextButton.styleFrom(
+                                padding: const EdgeInsets.symmetric(
+                                  horizontal: 8,
+                                ),
+                                minimumSize: Size.zero,
+                                tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                              ),
+                              icon: const Icon(Icons.map_outlined),
+                              label: const Text('Map'),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                    ..._nearbySlivers(
+                      nearby: nearby,
+                      locationReady: location.isReady,
+                      favoriteIds: favoriteIds,
+                      adsReady: AdService.instance.canRequestAds,
+                      onRetry: () => ref.invalidate(nearbyPlacesProvider),
+                      onOpenMaps: () => context.runAction(_openMapsSearch),
                     ),
                   ],
                 ),
               ),
             ),
-            ..._nearbySlivers(
-              nearby: nearby,
-              locationReady: location.isReady,
-              favoriteIds: favoriteIds,
-              adsReady: AdService.instance.canRequestAds,
-              onRetry: () => ref.invalidate(nearbyPlacesProvider),
-              onOpenMaps: () => context.runAction(_openMapsSearch),
-            ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }

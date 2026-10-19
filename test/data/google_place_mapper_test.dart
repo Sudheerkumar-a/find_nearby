@@ -11,7 +11,8 @@ void main() {
       'location': {'latitude': 25.2, 'longitude': 55.27},
       'rating': 4.5,
       'userRatingCount': 2103,
-      'nationalPhoneNumber': '+971 4 344 1122',
+      'nationalPhoneNumber': '04 344 1122',
+      'internationalPhoneNumber': '+971 4 344 1122',
       'websiteUri': 'https://example.com',
       'currentOpeningHours': {'openNow': true},
       'types': ['pharmacy', 'health'],
@@ -26,6 +27,7 @@ void main() {
     expect(place!.provider, PlaceSource.googlePlaces);
     expect(place.name, 'Life Pharmacy');
     expect(place.hasPhone, isTrue);
+    expect(place.phoneNumber, '04 344 1122');
     expect(place.hasWebsite, isTrue);
     expect(place.isOpen, isTrue);
     expect(place.category, 'Health');

@@ -56,3 +56,9 @@ kotlin {
 flutter {
     source = "../.."
 }
+
+dependencies {
+    // play-services-ads pulls work-runtime 2.7.0. R8 strips its WorkDatabase
+    // constructor, so release dies in InitializationProvider. 2.11.2 keeps it.
+    implementation("androidx.work:work-runtime:2.11.2")
+}
